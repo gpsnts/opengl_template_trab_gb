@@ -1,0 +1,6 @@
+# ninja log v5
+866	970	1602242766085154148	app	d26fb6c2fb418664
+788	866	1602242765977155445	CMakeFiles/app.dir/src/main.cpp.o	2e302023963400ac
+0	788	1602242765897156406	CMakeFiles/app.dir/cmake_pch.hxx.gch	6193a946511623c9
+0	7	0	/home/usr/PProjects/opengl_engine_2d/build/CMakeFiles/cmake.verify_globs	4d26ade04853abd2
+0	4	0	/home/usr/PProjects/opengl_engine_2d/build/CMakeFiles/cmake.verify_globs	4d26ade04853abd2
