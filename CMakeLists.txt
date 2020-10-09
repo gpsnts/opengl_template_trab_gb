@@ -12,6 +12,18 @@ include_directories(${HEADERS_DIR})
 
 add_executable(${PROJECT_NAME})
 
+target_link_libraries(
+  ${PROJECT_NAME}
+  glad
+)
+
+target_include_directories(
+  ${PROJECT_NAME}
+	PRIVATE
+  ${LIBS_INCLUDES}
+)
+
+
 file(
   GLOB
   SRCS

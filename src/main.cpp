@@ -1,4 +1,5 @@
 #include "../headers/main.hpp"
+#include <glad/glad.h>
 
 void foo()
 {
