@@ -1,0 +1,10 @@
+#!/bin/sh
+
+CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
+
+# "Syntax sugar"
+rm -rf build 2> /dev/null;
+cmake -B build -G "Ninja" -D CMAKE_CXX_FLAGS="$CXX_FLAGS";
+ninja -C build;
+cd build;
+./app;

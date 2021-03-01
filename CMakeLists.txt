@@ -1,48 +1,18 @@
 project(app)
-cmake_minimum_required(VERSION 3.18)
-
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Settings.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Libraries.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Headers.cmake)
+cmake_minimum_required(VERSION 3.16)
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/headers)
 
-include_directories(${HEADERS_DIR})
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Settings.cmake)
 add_executable(${PROJECT_NAME})
-
-target_link_libraries(
-  ${PROJECT_NAME}
-  glad
-)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Libraries.cmake)
+include_directories(${HEADERS_DIR})
 
 target_include_directories(
   ${PROJECT_NAME}
 	PRIVATE
   ${LIBS_INCLUDES}
-)
-
-
-file(
-  GLOB
-  SRCS
-  CONFIGURE_DEPENDS
-  ${SRC_DIR}/*.cpp
-)
-
-file(
-  GLOB
-  HEADERS_PCH
-  CONFIGURE_DEPENDS
-  ${SRC_DIR}/headers/pch/*.hpp
-)
-
-file(
-  GLOB
-  HEADERS
-  CONFIGURE_DEPENDS
-  ${SRC_DIR}/headers/*.hpp
 )
 
 target_sources(
@@ -53,8 +23,8 @@ target_sources(
   ${HEADERS_PCH}
 )
 
-target_precompile_headers(
-  ${PROJECT_NAME}
-  PRIVATE
-  ${HEADERS_DIR}/pch/default.hpp
-)
+# target_precompile_headers(
+#   ${PROJECT_NAME}
+#   PRIVATE
+#   ${HEADERS_DIR}/pch/*.hpp
+# )

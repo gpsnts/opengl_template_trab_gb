@@ -8,9 +8,17 @@ if(NOT OPENGL_FOUND)
   message(OpenGL needed!)                                            
 endif(NOT OPENGL_FOUND)
 
-# Glad
+# GLAD
 add_library(glad ${LIBS_DIR}/glad/src/glad.c)
 target_include_directories(glad PRIVATE ${LIBS_DIR}/glad/include)
+
+# GLFW
+add_subdirectory(${LIBS_DIR}/glfw EXCLUDE_FROM_ALL)
+
+# GLM
+add_subdirectory(${LIBS_DIR}/glm EXCLUDE_FROM_ALL)
+
+target_link_libraries(${PROJECT_NAME} glad glfw glm)
 
 # Includes directories
 file(

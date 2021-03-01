@@ -7,4 +7,26 @@ set(VERSION_FEATURE 1)
 
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_FEATURE}")
 message("\nProject version: ${VERSION}\n")
+
+file(
+  GLOB
+  SRCS
+  CONFIGURE_DEPENDS
+  ${SRC_DIR}/*.cpp
+)
+
+file(
+  GLOB
+  HEADERS_PCH
+  CONFIGURE_DEPENDS
+  ${SRC_DIR}/headers/pch/*.hpp
+)
+
+file(
+  GLOB
+  HEADERS
+  CONFIGURE_DEPENDS
+  ${SRC_DIR}/headers/*.hpp
+)
+
 message("Compiler settings...OK\n")
