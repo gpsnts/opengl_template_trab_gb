@@ -20,7 +20,6 @@ add_subdirectory(${LIBS_DIR}/glm EXCLUDE_FROM_ALL)
 
 target_link_libraries(${PROJECT_NAME} glad glfw glm)
 
-# Includes directories
 file(
   GLOB
   LIBS_INCLUDES
