@@ -18,6 +18,10 @@ add_subdirectory(${LIBS_DIR}/glfw EXCLUDE_FROM_ALL)
 # GLM
 add_subdirectory(${LIBS_DIR}/glm EXCLUDE_FROM_ALL)
 
+# STB
+include_directories(${LIBS_DIR}/stb)
+link_directories(${LIBS_DIR}/stb)
+
 target_link_libraries(${PROJECT_NAME} glad glfw glm)
 
 file(

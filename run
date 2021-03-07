@@ -2,35 +2,11 @@
 
 CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
 
-if [ $(ls libs/glfw | wc -l) -eq "0" -a $(ls libs/glm | wc -l) -eq "0" -a $(ls libs/SOIL2 | wc -l) -eq "0" ]
+if [ $(ls libs/glfw | wc -l) -eq "0" -a $(ls libs/glm | wc -l) -eq "0" -a $(ls libs/stb | wc -l) -eq "0" ]
 then
 	printf "\n\nAdding submodules \n\n"
 	git submodule init;
 	git submodule update;
-fi
-
-if [ $(apt list | grep 'libsdl2-dev' | wc -l) -eq "0" ]
-then
-	sudo apt-get install libsdl2-dev
-else
-	printf "\n\nAlready installed libsdl2-dev \n\n"
-fi
-
-if [ ! -d "libs/SOIL2/lib" ]
-then
-	printf "\n\nDoing the Premake(4) to creata a static lib (SOIL2) \n\n"
-	sudo apt-get install libsdl2-dev
-
-	cd libs/SOIL2;
-	premake4 --cc=gcc gmake;
-	cd make/linux;
-	make;
-	cp -r ../../lib/linux/* ../../src/SOIL2
-	cd ../../../../;
-
-	printf "\n\nDone static lib creation (SOIL2)"
-else
-	printf "\n\nAlready created static lib (SOIL2) \n\n"
 fi
 
 # "Syntax sugar"
