@@ -5,13 +5,26 @@ CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
 git submodule init;
 git submodule update;
 
-sudo apt-get install libsdl2-dev
+if [ $(apt list | grep 'libsdl2-dev' | wc -l) -eq "0" ]
+then
+	sudo apt-get install libsdl2-dev
+else
+	echo "Already has libsdl2-dev"
+fi
 
-cd libs/SOIL2;
-premake4 --cc=gcc gmake;
-cd make/linux;
-make;
-cd ../../../../;
+if [ ! -d "libs/SOIL2/lib" ]
+then
+	echo "Doing the Premake(4) to creata a static lib (SOIL2)"
+	sudo apt-get install libsdl2-dev
+
+	cd libs/SOIL2;
+	premake4 --cc=gcc gmake;
+	cd make/linux;
+	make;
+	cd ../../../../;
+else
+	echo "Already created static lib (SOIL2)"
+fi
 
 # "Syntax sugar"
 rm -rf build 2> /dev/null;
