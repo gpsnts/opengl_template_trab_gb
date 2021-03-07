@@ -5,6 +5,14 @@ CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
 git submodule init;
 git submodule update;
 
+sudo apt-get install libsdl2-dev
+
+cd libs/SOIL2;
+premake4 --cc=gcc gmake;
+cd make/linux;
+make;
+cd ../../../../;
+
 # "Syntax sugar"
 rm -rf build 2> /dev/null;
 cmake -B build -G "Ninja" -D CMAKE_CXX_FLAGS="$CXX_FLAGS";
