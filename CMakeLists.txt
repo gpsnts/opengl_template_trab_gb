@@ -23,8 +23,8 @@ target_sources(
   ${HEADERS_PCH}
 )
 
-# target_precompile_headers(
-#   ${PROJECT_NAME}
-#   PRIVATE
-#   ${HEADERS_DIR}/pch/*.hpp
-# )
+target_precompile_headers(
+  ${PROJECT_NAME}
+  PRIVATE
+  ${HEADERS_PCH}
+)

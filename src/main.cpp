@@ -1,46 +1,27 @@
-// #include <glad/glad.h>
-// #include <GLFW/glfw3.h>
-#include "headers/game.hpp"
-#include <iostream>
+#include "headers/opengl_config_setup.hpp"
 
 using namespace std;
 
-const char* APP_NAME = "OpenGL WIP Game";
+const char* APP_NAME = "OpenGL WIP GameSetup";
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-
 int main()
 {
-	Game::setup_opengl_glfw();
+	GameSetup::setup_opengl_glfw();
 
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, APP_NAME, NULL, NULL);
 
-	if (window == NULL)
-	{
-		cout << "Failed to create GLFW window" << endl;
-		glfwTerminate();
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-
-	// ! Set framebuffer size change adjust callback
-	glfwSetFramebufferSizeCallback(window, Game::framebuffer_size_callback);
+	if (!OpenGLConfigSetup::create_window(window)) return -1;
 	
-	// ! Set close window callback
-	glfwSetKeyCallback(window, Game::close_window_callback);
+	OpenGLConfigSetup::set_callbacks_and_context(window);
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		cout << "Failed to initialize GLAD" << endl;
-		return -1;
-	}
+	if (!OpenGLConfigSetup::init_glad()) return -1;
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// ! FPS Info
-		Game::frames_per_second(window);
+		GameSetup::frames_per_second(window);
 		
 		glfwPollEvents();
 		glfwSwapBuffers(window);

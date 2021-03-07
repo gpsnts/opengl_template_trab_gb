@@ -1,11 +1,11 @@
-#include "headers/game.hpp"
+#include "headers/game_setup.hpp"
 
-void Game::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void GameSetup::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-void Game::close_window_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+void GameSetup::close_window_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (key  == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
@@ -13,7 +13,7 @@ void Game::close_window_callback(GLFWwindow* window, int key, int scancode, int 
 	}	
 }
 
-void Game::setup_opengl_glfw()
+void GameSetup::setup_opengl_glfw()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -22,7 +22,7 @@ void Game::setup_opengl_glfw()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 }
 
-void Game::frames_per_second(GLFWwindow* window)
+void GameSetup::frames_per_second(GLFWwindow* window)
 {
 	static double previous_time = 0.0;
 	static int frame_count = 0;
