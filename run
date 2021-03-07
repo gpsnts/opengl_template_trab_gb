@@ -25,7 +25,7 @@ then
 	premake4 --cc=gcc gmake;
 	cd make/linux;
 	make;
-	cp -r ../../lib/linux/* ../../
+	cp -r ../../lib/linux/* ../../src/SOIL2
 	cd ../../../../;
 
 	printf "\n\nDone static lib creation (SOIL2)"
