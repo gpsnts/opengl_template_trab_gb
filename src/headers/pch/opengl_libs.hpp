@@ -1,8 +1,7 @@
-#ifndef OPENGL_LIBS_
-#define OPENGL_LIBS_
+#ifndef __OPENGL_LIBS__
+#define __OPENGL_LIBS__
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
 
-#endif // !OPENGL_LIBS_
+#endif // __OPENGL_LIBS__
