@@ -8,7 +8,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "pch/opengl_libs.hpp"
+#include "pch/glfw_pch.hpp"
+#include "pch/glad_pch.hpp"
 
 extern "C"
 {
