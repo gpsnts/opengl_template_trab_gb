@@ -22,6 +22,7 @@ int main()
 {
 	if (!glfwInit())
 	{
+		std::cerr << "Cann't init GLFW";
 		return -1;
 	}
 
@@ -30,131 +31,96 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Foo", NULL, NULL);
-
+	GLFWwindow *window = glfwCreateWindow(800, 600, "Hello Colorful Triangle", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-
+	
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+	
+	GLuint frag_shader, vert_shader, program;
 
-	if (!GLAD_GL_ARB_direct_state_access)
-	{
-		std::cout << "DSA not supported!" << std::endl;
-		return -1;
-	}
+	bool can_compile_program = true;
+
+	can_compile_program &= shader_compile("../src/shaders/triangle_vs.glsl", &vert_shader, GL_VERTEX_SHADER);
+	can_compile_program &= shader_compile("../src/shaders/triangle_fs.glsl", &frag_shader, GL_FRAGMENT_SHADER);
+
+	if (!can_compile_program) return -1;
+	// {
+		program = glCreateProgram();
+		glAttachShader(program, frag_shader);
+		glAttachShader(program, vert_shader);
+
+		glLinkProgram(program);
+
+		GLint compile_flag = -1;
+
+		glGetProgramiv(program, GL_LINK_STATUS, &compile_flag);
+
+		glUseProgram(program);
+		
+		printf("before delete shaders\n");
+		
+		glDeleteShader(frag_shader);
+  	glDeleteShader(vert_shader);
+	// }
 
 	float vertices[] = {
-			-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-			1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        -0.5f, -0.5f, 0.0f, // left  
+         0.5f, -0.5f, 0.0f, // right 
+         0.0f,  0.5f, 0.0f  // top   
+    }; 
 
-	GLuint attribPos = 0;
-	GLuint attribCol = 1;
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
 
-	unsigned int hctVBO;
-	glCreateBuffers(1, &hctVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glNamedBufferStorage(hctVBO, sizeof(vertices), vertices, GL_DYNAMIC_STORAGE_BIT);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-	unsigned int hctVAO;
-	glCreateVertexArrays(1, &hctVAO);
+    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-	GLuint vaoBindingPoint = 0;
-	glVertexArrayVertexBuffer(hctVAO, vaoBindingPoint, hctVBO, 0, 6 * sizeof(float));
-
-	glEnableVertexArrayAttrib(hctVAO, attribPos);
-	glEnableVertexArrayAttrib(hctVAO, attribCol);
-
-	glVertexArrayAttribFormat(hctVAO, attribPos, 3, GL_FLOAT, false, 0);
-	glVertexArrayAttribFormat(hctVAO, attribCol, 3, GL_FLOAT, false, 3 * sizeof(float));
-
-	glVertexArrayAttribBinding(hctVAO, attribPos, vaoBindingPoint);
-	glVertexArrayAttribBinding(hctVAO, attribCol, vaoBindingPoint);
-
-	bool
-			can_link_program = true,
-			can_use_program = true;
-
-	GLuint frag_shader, vert_shader, program;
-	can_link_program &= shader_compile("../src/shaders/triangle_fs.glsl", &frag_shader, GL_FRAGMENT_SHADER);
-	can_link_program &= shader_compile("../src/shaders/triangle_vs.glsl", &vert_shader, GL_VERTEX_SHADER);
-
-	if (can_link_program)
-	{
-		can_use_program &= create_program(frag_shader, vert_shader, &program);
-	}
-
-	if (can_use_program)
-	{
-		glUseProgram(program);
-	}
+    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    glBindVertexArray(0);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 
-		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+        // render
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-		glBindVertexArray(hctVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+        // draw our first triangle
+        glUseProgram(program);
+        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // glBindVertexArray(0); // no need to unbind it every time 
+ 
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glfwSwapBuffers(window);
+        glfwPollEvents();
 	}
-
-	// unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	// glCompileShader(vertexShader);
-
-	// int success;
-	// char infoLog[512];
-	// glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	// if (!success)
-	// {
-	// 	glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-	// 	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-	// 						<< infoLog << std::endl;
-	// }
-
-	// while (!glfwWindowShouldClose(window))
-	// {
-	// 	glfwSwapBuffers(window);
-	// 	glfwPollEvents();
-	// }
 
 	glfwTerminate();
 	return 0;
 }
-
-// #include "headers/pch/opengl_libs.hpp"
-
-// #include "headers/utils.hpp"
-// #include <iostream>
-
-// int main()
-// {
-// 	if (!glfwInit())
-// 	{
-// 		std::cerr << "Can't init GLFW" << std::endl;
-// 	}
-
-// 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-// 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-// 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-// 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-// 	GLuint _shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-// 	// shader_compile("../src/shaders/triangle_fs.glsl", GL_FRAGMENT_SHADER);
-// }

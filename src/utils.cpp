@@ -1,8 +1,14 @@
 #include "headers/utils.hpp"
 
+#include <iostream>
+
+#define USED_GL_ENUM(type) (type == GL_FRAGMENT_SHADER ? "GL_FRAGMENT_SHADER" : "GL_VERTEX_SHADER")
+
 bool shader_compile(const char *file_name, GLuint *shader, GLenum type)
 {
 	FILE *file = fopen(file_name, "r");
+	char *content;
+	int compile_flag = -1;
 
 	if (file != NULL)
 	{
@@ -10,52 +16,28 @@ bool shader_compile(const char *file_name, GLuint *shader, GLenum type)
 		size_t file_size = ftell(file);
 		rewind(file);
 
-		char *content = new char[file_size];
-
+		content = new char[file_size + 1];
 		fread(content, sizeof(char), file_size, file);
+		content[file_size] = '\0';
 
 		fclose(file);
 
-		printf("file %s\nCONTENT:\n\n%s", file_name, content);
+		// Shader creation
+		*shader = glCreateShader(type);
+		const GLchar *parsed_content = (const GLchar *)content;
 
-		return shader_assign(content, shader, type);
+		glShaderSource(*shader, 1, &parsed_content, NULL);
+		glCompileShader(*shader);
+		glGetShaderiv(*shader, GL_COMPILE_STATUS, &compile_flag);
+		// End shader creation
+
+		delete[] content, parsed_content;
 	}
 
-	return false;
-}
-
-bool shader_assign(char* shader_content, GLuint *shader, GLenum type)
-{
-	*shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	const GLchar* parsed_content = (const GLchar*) shader_content;
-
-	glShaderSource(*shader, 1, &parsed_content, NULL);
-
-	glCompileShader(*shader);
-
-	int compile_flag = -1;
-
-	glGetShaderiv(*shader, GL_COMPILE_STATUS, &compile_flag);
-
-	if (GL_TRUE != compile_flag) return false;
-	return true;
-}
-
-bool create_program(GLuint frag_shader, GLuint vert_shader, GLuint *program)
-{
-	glAttachShader(*program, frag_shader);
-	glAttachShader(*program, vert_shader);
-
-	glLinkProgram(*program);
-
-	GLint compile_flag = -1;
-
-	glGetProgramiv(*program, GL_LINK_STATUS, &compile_flag);
-
-	if (GL_TRUE != compile_flag) return false;
-
-	glDeleteShader(frag_shader);
-  glDeleteShader(vert_shader);
+	if (GL_TRUE != compile_flag)
+	{
+		std::cerr << "ERROR CREATING " << USED_GL_ENUM(type) << std::endl;
+		return false;
+	}
 	return true;
 }
