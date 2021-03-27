@@ -1,5 +1,5 @@
-project(app)
 cmake_minimum_required(VERSION 3.16)
+project(app VERSION 1.0)
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/headers)
