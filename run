@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
 
