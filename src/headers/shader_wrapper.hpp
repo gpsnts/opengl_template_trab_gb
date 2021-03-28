@@ -12,6 +12,12 @@
 
 using namespace std;
 
+// struct InputColor {
+// 	GLfloat x;
+// 	GLfloat y;
+// 	GLfloat z;
+// };
+
 extern "C"
 {
 	bool shader_compile(const char *file_name, GLuint *shader, GLenum type);

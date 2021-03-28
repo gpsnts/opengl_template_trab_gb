@@ -1,7 +1,9 @@
 #!/bin/sh
 
-CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive -lfreetype"
+# CXX_FLAGS="-lGL -lX11 -lXrandr -lpthread -fpermissive"
 
+
+# Hard-coded 'cause time reasons
 if [ $(ls libs/glfw | wc -l) -eq "0" -a $(ls libs/glm | wc -l) -eq "0" -a $(ls libs/stb | wc -l) -eq "0" ]
 then
 	printf "\n\nAdding submodules \n\n"
@@ -9,9 +11,9 @@ then
 	git submodule update;
 fi
 
-# "Syntax sugar"
 rm -rf build 2> /dev/null;
-cmake -B build -G "Ninja" -D CMAKE_CXX_FLAGS="$CXX_FLAGS";
+cmake -B build -G "Ninja"; 
+# -D CMAKE_CXX_FLAGS="$CXX_FLAGS";
 ninja -C build;
 cd build;
 ./app;
