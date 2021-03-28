@@ -1,9 +1,7 @@
 #pragma once
 
-#ifndef __UTILS_HPP__
-#define __UTILS_HPP__
-
-#define MAX_SHADER_FILE_LENGTH 262144
+#ifndef __SHADER_WRAPPER_HPP__
+#define __SHADER_WRAPPER_HPP__
 
 #include <string.h>
 #include <stdio.h>
@@ -21,4 +19,4 @@ extern "C"
 
 bool create_program(GLuint *program, GLuint vertex_shader, GLuint fragment_shader);
 
-#endif // __UTILS_HPP__
+#endif // __SHADER_WRAPPER_HPP__

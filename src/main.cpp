@@ -1,6 +1,11 @@
 #include <iostream>
 
-#include "headers/utils.hpp"
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <glm/glm.hpp>
+
+#include "headers/shader_wrapper.hpp"
 #include "headers/gl_config.hpp"
 #include "headers/callback_window.hpp"
 
@@ -10,7 +15,7 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-int main()
+int main(int argc, char *argv[])
 {
 	if (!gl_config::init_glfw())
 	{
@@ -54,27 +59,34 @@ int main()
 	if (!create_program(&program, vert_shader, frag_shader)) 
 	{
 		cerr << "ERROR: Can't create program (shaders ok)" << endl;
+		return -1;
 	}
 
-	float vertices[] = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f};
+	// GLfloat vertices[] = {
+  //   -0.25f, -0.25f, 0.0f, // Esq
+  //    0.25f, -0.25f, 0.0f, // Dir
+  //    0.0f,  0.5f, 0.0f  // Topo
+  // };
 
+	GLfloat vertices[] = {
+    -0.25f, 0.25f, 0.0f, // Esq
+     0.25f, 0.25f, 0.0f, // Dir
+     0.0f,  -0.25f, 0.0f  // Topo
+  };
+
+	GLuint attribPos = 0;
 	GLuint VBO, VAO;
 
-	glGenVertexArrays(1, &VAO);
+	// VBO
 	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),  (void *)0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	// VAO
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+	glEnableVertexAttribArray(attribPos);
+	glVertexAttribPointer(attribPos, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -84,7 +96,6 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(program);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 

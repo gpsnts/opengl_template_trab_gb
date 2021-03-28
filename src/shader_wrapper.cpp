@@ -1,4 +1,4 @@
-#include "headers/utils.hpp"
+#include "headers/shader_wrapper.hpp"
 
 #define USED_GL_ENUM(type) (type == GL_FRAGMENT_SHADER ? "GL_FRAGMENT_SHADER" : "GL_VERTEX_SHADER")
 
