@@ -1,4 +1,4 @@
-# **opengl_skeleton**
+# **opengl_template**
 
 ## **Used tools**
 
