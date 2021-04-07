@@ -1,0 +1,78 @@
+#include "headers/shader.hpp"
+
+void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type)
+{
+	cout << "Reading - " << USED_GL_ENUM(type) << endl;
+
+	FILE *file = fopen(file_name, "r");
+	char *content;
+	int compile_flag = -1;
+	GLchar info_log[512];
+
+	if (file != NULL)
+	{
+		cout << "Found - " << file_name << endl;
+	
+		fseek(file, 0, SEEK_END);
+		size_t file_size = ftell(file);
+		rewind(file);
+
+		content = new char[file_size + 1];
+		fread(content, sizeof(char), file_size, file);
+		content[file_size] = '\0';
+
+		fclose(file);
+
+		// Shader creation
+		*shader = glCreateShader(type);
+		const GLchar *parsed_content = (const GLchar *)content;
+		glShaderSource(*shader, 1, &parsed_content, NULL);
+		glCompileShader(*shader);
+		glGetShaderiv(*shader, GL_COMPILE_STATUS, &compile_flag);
+		// End shader creation
+
+		delete[] content, parsed_content;
+	}
+
+	if (GL_TRUE != compile_flag)
+	{
+		cerr << "ERROR COMPILING " << USED_GL_ENUM(type) << endl;
+		glGetShaderInfoLog(*shader, sizeof(info_log), NULL, info_log);
+		cerr << "INFO LOG -- " << info_log << endl;
+	}
+	else cout << "Compiled - " << file_name << endl;
+}
+
+void Shader::compile(
+	const char *file_name_vertex,
+	const char *file_name_fragment
+)
+{
+	GLuint vertex_shader, fragment_shader;
+	GLchar info_log[512];
+
+	this->compile_selected(file_name_vertex, &vertex_shader, GL_VERTEX_SHADER);
+	this->compile_selected(file_name_fragment, &fragment_shader, GL_FRAGMENT_SHADER);
+	
+	this->program = glCreateProgram();
+	glAttachShader(this->program, vertex_shader);
+	glAttachShader(this->program, fragment_shader);
+
+	glLinkProgram(this->program);
+
+	GLint compile_flag = -1;
+
+	glGetProgramiv(this->program, GL_LINK_STATUS, &compile_flag);
+
+	if (GL_TRUE != compile_flag)
+	{
+		cerr << "ERROR CREATING/LINKING THE PROGRAM" << endl;
+		glGetProgramInfoLog(this->program, sizeof(info_log), NULL, info_log);
+		cerr << "INFO LOG -- " << info_log << endl;
+	}	
+}
+
+GLuint Shader::getProgram()
+{
+	return this->program;
+}
