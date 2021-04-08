@@ -74,6 +74,14 @@ void Application::frames_per_second(GLFWwindow *window)
 	count++;
 }
 
+void Application::process_input(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+}
+
 GLFWwindow *Application::get_window()
 {
 	return window;

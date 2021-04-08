@@ -60,6 +60,8 @@ public:
 		int stride,
 		int offset
 	);
+
+	void clean();
 };
 
 #endif // __RENDERER_HPP__

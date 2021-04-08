@@ -98,3 +98,15 @@ void Renderer::vbo_attrib(
 	);
 	glEnableVertexAttribArray(layout_indexes[key_layout]);
 }
+
+void Renderer::clean()
+{
+	for (auto vao : vaos){
+		glDeleteVertexArrays(1, &vao.second);
+	}	
+
+	for (auto vbo : vbos)
+	{
+		glDeleteBuffers(1, &vbo.second);
+	}
+}

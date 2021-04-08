@@ -32,6 +32,7 @@ public:
 	Application (int s_width, int s_height, string s_name);
 	
 	void static frames_per_second(GLFWwindow *window);
+	void static process_input(GLFWwindow *window);
 	bool init();
 	GLFWwindow *get_window();
 };
