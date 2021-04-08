@@ -7,7 +7,13 @@
 
 int main(int argc, char *argv[])
 {
-	bool show_fps = true;
+	bool show_fps = false;
+
+	if (argc >= 2)
+	{
+		string show_fps_flag(argv[1]);
+		if (show_fps_flag == "show_fps") show_fps = true;
+	}
 	
 	Application *app = new Application(800, 600, "Test");
 	Renderer render;
