@@ -5,8 +5,6 @@
 
 #include <glm/glm.hpp>
 
-#include "headers/shader_wrapper.hpp"
-#include "headers/gl_config.hpp"
 #include "headers/callback_window.hpp"
 
 #include "headers/pch/glad_pch.hpp"
@@ -15,13 +13,10 @@
 #define GL_CALC_STRIDE(x) (x * sizeof(GLfloat))
 #define GL_CALC_OFFSET(x) ((GLvoid *)(x * sizeof(GLfloat)))
 
-int WIDTH = 800, HEIGHT = 600;
-GLFWwindow *window;
-
 #include "headers/shader.hpp"
 #include "headers/renderer.hpp"
 #include "headers/resources.hpp"
-
+#include "headers/application.hpp"
 
 // TODO: Remove
 #include <iostream>
@@ -29,27 +24,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	// Init config
-	if (!gl_config::init_glfw())
-	{
-		cerr << "Can't initialize Glad" << endl;
-		return -1;
-	}
-
-	gl_config::set_opengl_version_profile();
-
-	window = glfwCreateWindow(800, 600, "Triangle Example", NULL, NULL);
+	bool show_fps = true;
 	
-	if (!gl_config::check_window_creation(window)) return -1;
-
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, callback_window::framebuffer_size_callback);
-
-	if (!gl_config::init_glad()) return -1;
-
-	// End - Init config
-
-	// TODO: WIP (Renderer)
+	Application *app = new Application(800, 600, "Test");
+	Renderer render;
+	
+	if (!app->init()) return -1;
 
 	Resources::assign_shader(
 		"../src/shaders/triangle_vs.glsl",
@@ -57,65 +37,338 @@ int main(int argc, char *argv[])
 		"application_shaders"
 	);
 
+	while (!glfwWindowShouldClose(app->get_window()))
+	{
+		if (show_fps) Application::frames_per_second(app->get_window());
+		callback_window::process_input(app->get_window());
+		glClearColor(0.33f, 0.1f, 0.5f, 0.5f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(app->get_window());
+		glfwPollEvents();
+	}
 
+	// Clean
 	Resources::clean();
+	delete app, render;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // int main(int argc, char *argv[])
 // {
-// 	if (!gl_config::init_glfw())
-// 	{
-// 		cerr << "Can't initialize Glad" << endl;
-// 		return 1;
-// 	}
-
-// 	gl_config::set_opengl_version_profile();
-
-// 	window = glfwCreateWindow(800, 600, "Triangle Example", NULL, NULL);
-	
-// 	if (!gl_config::check_window_creation(window)) return -1;
-
-// 	glfwMakeContextCurrent(window);
-// 	glfwSetFramebufferSizeCallback(window, callback_window::framebuffer_size_callback);
-
-// 	if (!gl_config::init_glad()) return -1;
-
 // 	// BUFFERS
-// 	GLfloat positions[] = {
-// 	   0.0f,  0.0f,  0.0f,
-// 	   0.33f, 0.50f, 0.0f,
-// 	  -0.33f, 0.50f, 0.0f,
+	// GLfloat positions[] = {
+	//    0.0f,  0.0f,  0.0f,
+	//    0.33f, 0.50f, 0.0f,
+	//   -0.33f, 0.50f, 0.0f,
 
-// 	   0.0f,   0.0f,  0.0f,
-// 	  -0.33f, -0.50f, 0.0f,
-// 	   0.33f, -0.50f, 0.0f
-// 	};
+	//    0.0f,   0.0f,  0.0f,
+	//   -0.33f, -0.50f, 0.0f,
+	//    0.33f, -0.50f, 0.0f
+	// };
 
-// 	GLfloat colors[] = {
-// 		1.0f, 0.0f, 0.0f,
-// 		1.0f, 0.0f, 1.0f,
-// 		0.0f, 0.0f, 1.0f,
+	// GLfloat colors[] = {
+	// 	1.0f, 0.0f, 0.0f,
+	// 	1.0f, 0.0f, 1.0f,
+	// 	0.0f, 0.0f, 1.0f,
 
-// 		0.0f, 0.0f, 1.0f,
-// 		0.0f, 1.0f, 1.0f,
-// 		0.0f, 1.0f, 0.0f
-// 	};
-
-// 	GLuint attribPos = 0, attribColor = 1;
-// 	GLuint VBO_Position, VBO_Position_2, VBO_Color, VAO;
+	// 	0.0f, 0.0f, 1.0f,
+	// 	0.0f, 1.0f, 1.0f,
+	// 	0.0f, 1.0f, 0.0f
+	// };
 
 // 	/** ! VBO(s) */
 	
 // 	// Loc
 // 	glGenBuffers(1, &VBO_Position);
 // 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Position);
-
 // 	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 
 // 	// Colors
 // 	glGenBuffers(1, &VBO_Color);
 // 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Color);
-	
 // 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
 // 	/** VAO(s) */ 
@@ -164,7 +417,7 @@ int main(int argc, char *argv[])
 // 	while (!glfwWindowShouldClose(window))
 // 	{
 // 		gl_config::frames_per_second(window);
-// 		callback_window::process_input(window);
+		// callback_window::process_input(window);
 
 // 		glClearColor(0.33f, 0.1f, 0.5f, 0.5f);
 // 		glClear(GL_COLOR_BUFFER_BIT);

@@ -16,7 +16,6 @@ Shader Resources::assign_shader(
 	return shaders[key];
 }
 
-// Runnable after deleting VAO(s)/VBO(s)
 void Resources::clean()
 {
 	for (auto iter_shaders : shaders)

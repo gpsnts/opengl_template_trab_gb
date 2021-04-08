@@ -2,8 +2,6 @@
 
 void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type)
 {
-	cout << "Reading - " << USED_GL_ENUM(type) << endl;
-
 	FILE *file = fopen(file_name, "r");
 	char *content;
 	int compile_flag = -1;
@@ -11,8 +9,6 @@ void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type
 
 	if (file != NULL)
 	{
-		cout << "Found - " << file_name << endl;
-	
 		fseek(file, 0, SEEK_END);
 		size_t file_size = ftell(file);
 		rewind(file);
@@ -40,7 +36,6 @@ void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type
 		glGetShaderInfoLog(*shader, sizeof(info_log), NULL, info_log);
 		cerr << "INFO LOG -- " << info_log << endl;
 	}
-	else cout << "Compiled - " << file_name << endl;
 }
 
 void Shader::compile(

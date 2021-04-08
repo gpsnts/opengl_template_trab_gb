@@ -53,6 +53,7 @@
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
-		"*.yml": "cpp"
+		"*.yml": "cpp",
+		"map": "cpp"
 	}
 }
