@@ -24,6 +24,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+	// Hides the app name - "Test"
 	bool show_fps = true;
 	
 	Application *app = new Application(800, 600, "Test");
