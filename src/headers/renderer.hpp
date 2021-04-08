@@ -12,7 +12,7 @@
 #include <iostream>
 using namespace std;
 
-enum AssignOption {
+enum Type {
 	DATA,
 	POSITION,
 	COLOR
@@ -42,11 +42,12 @@ public:
 	std::map<std::string, std::vector<GLfloat>> get_colors();
 
 	bool set_data(
-		AssignOption selected,
+		Type selected,
 		string key_selected,
 		std::initializer_list<GLfloat> payload
 	);
-	// void bind_buffer();
+
+	void bind_buffer(Type type, string key_buffer, string key_array);
 	// void 
 };
 

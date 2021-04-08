@@ -31,7 +31,7 @@ std::map<std::string, std::vector<GLfloat>> Renderer::get_colors()
 }
 
 bool Renderer::set_data(
-	AssignOption selected,
+	Type selected,
 	string key_selected,
 	std::initializer_list<GLfloat> payload
 )
@@ -52,4 +52,15 @@ bool Renderer::set_data(
 	default:
 		return false;
 	}
+}
+
+void Renderer::bind_buffer(Type type, string key_buffer, string key_array)
+{
+	GLfloat clone[type == DATA ? data[key_array].size() : positions[key_array].size()];
+	
+	std::copy(
+		type == DATA ? data[key_array].begin() : positions[key_array].begin(),
+		type == DATA ? data[key_array].end() : positions[key_array].end(),
+		clone
+	);
 }
