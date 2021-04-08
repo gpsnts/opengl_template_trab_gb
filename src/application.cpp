@@ -64,7 +64,7 @@ void Application::frames_per_second(GLFWwindow *window)
 
 			out << fixed
 					<< "FPS: " << frames_per_second << " "
-					<< "Elapsed time " << millis_per_frame << " ";
+					<< "Frame time " << millis_per_frame << " ";
 
 			glfwSetWindowTitle(window, out.str().c_str());
 

@@ -1,6 +1,9 @@
 #ifndef __RENDERER_HPP__
 #define __RENDERER_HPP__
 
+#define GL_CALC_STRIDE(x) (x * sizeof(GLfloat))
+#define GL_CALC_OFFSET(x) ((GLvoid *)(x * sizeof(GLfloat)))
+
 #include <map>
 #include <string>
 #include <vector>
@@ -23,19 +26,19 @@ class Renderer
 private:
 	std::map<std::string, GLuint> vaos;
 	std::map<std::string, GLuint> vbos;
-	std::map<std::string, GLuint> uniforms_indexes;
+	std::map<std::string, GLuint> layout_indexes;
 
 	std::map<std::string, std::vector<GLfloat>> data;
 	std::map<std::string, std::vector<GLfloat>> positions;
 	std::map<std::string, std::vector<GLfloat>> colors;
 public:
 	Renderer() 
-	: vaos(), vbos(), uniforms_indexes(),
+	: vaos(), vbos(), layout_indexes(),
 		data(), positions(), colors() {};
 
 	std::map<std::string, GLuint> get_vaos();
 	std::map<std::string, GLuint> get_vbos();
-	std::map<std::string, GLuint> get_uniforms_indexes();
+	std::map<std::string, GLuint> get_layout_indexes();
 
 	std::map<std::string, std::vector<GLfloat>> get_data();
 	std::map<std::string, std::vector<GLfloat>> get_positions();
@@ -48,7 +51,15 @@ public:
 	);
 
 	void bind_buffer(Type type, string key_buffer, string key_array);
-	// void 
+	void bind_vertex(string key_vertex);
+
+	void vbo_attrib(
+		string key_buffer,
+		string key_layout,
+		GLuint layout_index,
+		int stride,
+		int offset
+	);
 };
 
 #endif // __RENDERER_HPP__
