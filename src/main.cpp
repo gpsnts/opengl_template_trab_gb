@@ -96,6 +96,22 @@ int main(int argc, char *argv[])
 	);
 	// End - Colors
 
+	// Data
+	render.set_data(
+		DATA,
+		"Data_3a",
+		{
+			0.0f,  0.0f,  0.0f,
+      0.33f, 0.50f, 0.0f,
+     -0.33f, 0.50f, 0.0f,
+
+      0.0f, 1.0f, 1.0f,
+      0.0f, 1.0f, 1.0f,
+      0.0f, 1.0f, 1.0f
+		}
+	);
+	// End - Data
+
 	// Attrib
 	// Ex - 1
 	render.bind_vertex("VAO_1");
@@ -107,6 +123,12 @@ int main(int argc, char *argv[])
 	render.bind_buffer(POSITION, "VBO_Position_2", "Positions_2");
 	render.vbo_attrib("VBO_Position_2", 0, 0, 0);
 	//
+	// Ex - 3a
+	render.bind_vertex("VAO_3a");
+	render.bind_buffer(DATA, "VBO_Data_3a", "Data_3a");
+	render.vbo_attrib("VBO_Data_3a", 0, 0, 0);
+	render.vbo_attrib("VBO_Data_3a", 1, 0, 9);
+	//
 	// Ex - 3b
 	render.bind_vertex("VAO_3b");
 	render.bind_buffer(POSITION, "VBO_Position_3b", "Positions_3b");
@@ -116,7 +138,10 @@ int main(int argc, char *argv[])
 	//
 	// End - Attrib
 
-	bool show_1 = false, show_2 = false, show_3b = false;
+	bool show_1 = false,
+			 show_2 = false, 
+			 show_3a = false, 
+			 show_3b = false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
@@ -128,6 +153,9 @@ int main(int argc, char *argv[])
 
 		if (glfwGetKey(app->get_window(), GLFW_KEY_W) == GLFW_PRESS) show_2 = false;
 		if (glfwGetKey(app->get_window(), GLFW_KEY_S) == GLFW_PRESS) show_2 = true;
+
+		if (glfwGetKey(app->get_window(), GLFW_KEY_E) == GLFW_PRESS) show_3a = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_D) == GLFW_PRESS) show_3a = true;
 
 		if (glfwGetKey(app->get_window(), GLFW_KEY_R) == GLFW_PRESS) show_3b = false;
 		if (glfwGetKey(app->get_window(), GLFW_KEY_F) == GLFW_PRESS) show_3b = true;
@@ -165,6 +193,14 @@ int main(int argc, char *argv[])
 			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 1.0f, 1.0f, 1.0f);
 			glDrawArrays(GL_LINE_LOOP, 6, 9);
 
+			glBindVertexArray(0);
+		}
+
+		if (show_3a)
+		{
+			glUseProgram(Resources::get_current_shaders()["shader"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_3a"]);
+  		glDrawArrays(GL_TRIANGLES, 0, 3);
 			glBindVertexArray(0);
 		}
 
