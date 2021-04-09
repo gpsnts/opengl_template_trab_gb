@@ -49,6 +49,24 @@ int main(int argc, char *argv[])
 
 	render.set_data(
 		POSITION,
+		"Positions_2",
+		{
+			 0.0f,  0.0f,  0.0f,
+       0.33f, 0.50f, 0.0f,
+      -0.33f, 0.50f, 0.0f,
+
+       0.0f,   0.0f,  0.0f,
+      -0.33f, -0.50f, 0.0f,
+       0.33f, -0.50f, 0.0f,
+
+			 0.0f,   0.0f,  0.0f,
+			 0.33f,  0.50f, 0.0f,
+			 0.33f, -0.50f, 0.0f
+		}
+	);
+
+	render.set_data(
+		POSITION,
 		"Positions_3b",
 		{
 			 0.0f,  0.0f,  0.0f,
@@ -84,6 +102,11 @@ int main(int argc, char *argv[])
 	render.bind_buffer(POSITION, "VBO_Position_1", "Positions_1");
 	render.vbo_attrib("VBO_Position_1", 0, 0, 0);
 	//
+	// Ex - 2
+	render.bind_vertex("VAO_2");
+	render.bind_buffer(POSITION, "VBO_Position_2", "Positions_2");
+	render.vbo_attrib("VBO_Position_2", 0, 0, 0);
+	//
 	// Ex - 3b
 	render.bind_vertex("VAO_3b");
 	render.bind_buffer(POSITION, "VBO_Position_3b", "Positions_3b");
@@ -93,7 +116,7 @@ int main(int argc, char *argv[])
 	//
 	// End - Attrib
 
-	bool show_1 = false, show_3b = false;
+	bool show_1 = false, show_2 = false, show_3b = false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
@@ -103,10 +126,13 @@ int main(int argc, char *argv[])
 		if (glfwGetKey(app->get_window(), GLFW_KEY_Q) == GLFW_PRESS) show_1 = false;
 		if (glfwGetKey(app->get_window(), GLFW_KEY_A) == GLFW_PRESS) show_1 = true;
 
+		if (glfwGetKey(app->get_window(), GLFW_KEY_W) == GLFW_PRESS) show_2 = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_S) == GLFW_PRESS) show_2 = true;
+
 		if (glfwGetKey(app->get_window(), GLFW_KEY_R) == GLFW_PRESS) show_3b = false;
 		if (glfwGetKey(app->get_window(), GLFW_KEY_F) == GLFW_PRESS) show_3b = true;
 		
-		glClearColor(0.33f, 0.1f, 0.5f, 0.5f);
+		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if (show_1)
@@ -122,8 +148,31 @@ int main(int argc, char *argv[])
 			glBindVertexArray(0);
 		}
 
+		if (show_2)
+		{
+			GLint colorLoc = glGetUniformLocation(
+				Resources::get_current_shaders()["shader_uniform"].getProgram(),
+				"inputColor"
+			);
+			glUseProgram(Resources::get_current_shaders()["shader_uniform"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_2"]);
+			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_LINE_LOOP, 3, 6);
+			
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 1.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_LINE_LOOP, 6, 9);
+
+			glBindVertexArray(0);
+		}
+
 		if (show_3b)
 		{
+			glLineWidth(15);
+			glPointSize(10);
+
 			glUseProgram(Resources::get_current_shaders()["shader"].getProgram());
 			glBindVertexArray(render.get_vaos()["VAO_3b"]);
   		glDrawArrays(GL_TRIANGLES, 0, 6);
