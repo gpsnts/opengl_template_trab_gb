@@ -79,24 +79,21 @@ void Renderer::bind_vertex(string key_vertex)
 
 void Renderer::vbo_attrib(
 	string key_buffer,
-	string key_layout,
 	GLuint layout_index,
 	int stride,
 	int offset
 )
 {
-	layout_indexes[key_layout] = layout_index;
-
 	glBindBuffer(GL_ARRAY_BUFFER, vbos[key_buffer]);
 	glVertexAttribPointer(
-		layout_indexes[key_layout],
+		layout_index,
 		3,
 		GL_FLOAT,
 		GL_FALSE, 
 		GL_CALC_STRIDE(stride),
 		GL_CALC_OFFSET(offset)
 	);
-	glEnableVertexAttribArray(layout_indexes[key_layout]);
+	glEnableVertexAttribArray(layout_index);
 }
 
 void Renderer::clean()

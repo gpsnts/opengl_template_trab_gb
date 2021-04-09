@@ -55,7 +55,6 @@ public:
 
 	void vbo_attrib(
 		string key_buffer,
-		string key_layout,
 		GLuint layout_index,
 		int stride,
 		int offset
