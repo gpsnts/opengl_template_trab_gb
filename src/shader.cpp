@@ -1,8 +1,6 @@
-#include "headers/shader_wrapper.hpp"
+#include "headers/shader.hpp"
 
-#define USED_GL_ENUM(type) (type == GL_FRAGMENT_SHADER ? "GL_FRAGMENT_SHADER" : "GL_VERTEX_SHADER")
-
-bool shader_compile(const char *file_name, GLuint *shader, GLenum type)
+void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type)
 {
 	FILE *file = fopen(file_name, "r");
 	char *content;
@@ -37,31 +35,39 @@ bool shader_compile(const char *file_name, GLuint *shader, GLenum type)
 		cerr << "ERROR COMPILING " << USED_GL_ENUM(type) << endl;
 		glGetShaderInfoLog(*shader, sizeof(info_log), NULL, info_log);
 		cerr << "INFO LOG -- " << info_log << endl;
-		return false;
 	}
-	return true;
 }
 
-bool create_program(GLuint *program, GLuint vertex_shader, GLuint fragment_shader)
+void Shader::compile(
+	const char *file_name_vertex,
+	const char *file_name_fragment
+)
 {
+	GLuint vertex_shader, fragment_shader;
 	GLchar info_log[512];
-	*program = glCreateProgram();
-	glAttachShader(*program, vertex_shader);
-	glAttachShader(*program, fragment_shader);
+
+	this->compile_selected(file_name_vertex, &vertex_shader, GL_VERTEX_SHADER);
+	this->compile_selected(file_name_fragment, &fragment_shader, GL_FRAGMENT_SHADER);
 	
-	glLinkProgram(*program);
+	this->program = glCreateProgram();
+	glAttachShader(this->program, vertex_shader);
+	glAttachShader(this->program, fragment_shader);
+
+	glLinkProgram(this->program);
 
 	GLint compile_flag = -1;
 
-	glGetProgramiv(*program, GL_LINK_STATUS, &compile_flag);
+	glGetProgramiv(this->program, GL_LINK_STATUS, &compile_flag);
 
 	if (GL_TRUE != compile_flag)
 	{
 		cerr << "ERROR CREATING/LINKING THE PROGRAM" << endl;
-		glGetProgramInfoLog(*program, sizeof(info_log), NULL, info_log);
+		glGetProgramInfoLog(this->program, sizeof(info_log), NULL, info_log);
 		cerr << "INFO LOG -- " << info_log << endl;
-		return false;
-	}
+	}	
+}
 
-	return true;
+GLuint Shader::getProgram()
+{
+	return this->program;
 }

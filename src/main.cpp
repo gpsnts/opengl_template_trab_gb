@@ -1,145 +1,227 @@
-#include <iostream>
+// #include <glm/glm.hpp>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <glm/glm.hpp>
-
-#include "headers/shader_wrapper.hpp"
-#include "headers/gl_config.hpp"
-#include "headers/callback_window.hpp"
-
-#include "headers/pch/glad_pch.hpp"
-#include "headers/pch/glfw_pch.hpp"
-
-#define GL_CALC_STRIDE(x) (x * sizeof(GLfloat))
-#define GL_CALC_OFFSET(x) ((GLvoid *)(x * sizeof(GLfloat)))
-
-int WIDTH = 800, HEIGHT = 600;
-GLFWwindow *window;
+#include "headers/shader.hpp"
+#include "headers/renderer.hpp"
+#include "headers/resources.hpp"
+#include "headers/application.hpp"
 
 int main(int argc, char *argv[])
 {
-	if (!gl_config::init_glfw())
+	bool show_fps = false;
+
+	if (argc >= 2)
 	{
-		cerr << "Can't initialize Glad" << endl;
-		return 1;
+		string show_fps_flag(argv[1]);
+		if (show_fps_flag == "show_fps") show_fps = true;
 	}
-
-	gl_config::set_opengl_version_profile();
-
-	window = glfwCreateWindow(800, 600, "Triangle Example", NULL, NULL);
 	
-	if (!gl_config::check_window_creation(window)) return -1;
-
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, callback_window::framebuffer_size_callback);
-
-	if (!gl_config::init_glad()) return -1;
-
-	// BUFFERS
-	GLfloat positions[] = {
-	   0.0f,  0.0f,  0.0f,
-	   0.33f, 0.50f, 0.0f,
-	  -0.33f, 0.50f, 0.0f,
-
-	   0.0f,   0.0f,  0.0f,
-	  -0.33f, -0.50f, 0.0f,
-	   0.33f, -0.50f, 0.0f
-	};
-
-	GLfloat colors[] = {
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-
-		0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 0.0f
-	};
-
-	GLuint attribPos = 0, attribColor = 1;
-	GLuint VBO_Position, VBO_Position_2, VBO_Color, VAO;
-
-	/** ! VBO(s) */
+	Application *app = new Application(800, 600, "Test");
+	Renderer render;
 	
-	// Loc
-	glGenBuffers(1, &VBO_Position);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Position);
+	if (!app->init()) return -1;
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+	Resources::assign_shader(
+		"../src/shaders/triangle_vs.glsl",
+		"../src/shaders/triangle_fs.glsl",
+		"shader"
+	);
+
+	Resources::assign_shader(
+		"../src/shaders/triangle_vs.glsl",
+		"../src/shaders/triangle_fs_uniform.glsl",
+		"shader_uniform"
+	);
+
+	// Positions
+	render.set_data(
+		POSITION,
+		"Positions_1",
+		{
+			 0.0f,  0.0f,  0.0f,
+       0.33f, 0.50f, 0.0f,
+      -0.33f, 0.50f, 0.0f,
+
+       0.0f,   0.0f,  0.0f,
+      -0.33f, -0.50f, 0.0f,
+       0.33f, -0.50f, 0.0f
+		}
+	);
+
+	render.set_data(
+		POSITION,
+		"Positions_2",
+		{
+			 0.0f,  0.0f,  0.0f,
+       0.33f, 0.50f, 0.0f,
+      -0.33f, 0.50f, 0.0f,
+
+       0.0f,   0.0f,  0.0f,
+      -0.33f, -0.50f, 0.0f,
+       0.33f, -0.50f, 0.0f,
+
+			 0.0f,   0.0f,  0.0f,
+			 0.33f,  0.50f, 0.0f,
+			 0.33f, -0.50f, 0.0f
+		}
+	);
+
+	render.set_data(
+		POSITION,
+		"Positions_3b",
+		{
+			 0.0f,  0.0f,  0.0f,
+       0.33f, 0.50f, 0.0f,
+      -0.33f, 0.50f, 0.0f,
+
+       0.0f,   0.0f,  0.0f,
+      -0.33f, -0.50f, 0.0f,
+       0.33f, -0.50f, 0.0f
+		}
+	);
+	// End - Positions
 
 	// Colors
-	glGenBuffers(1, &VBO_Color);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Color);
-	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	render.set_data(
+		COLOR,
+		"Colors_3b",
+		{
+			1.0f, 0.0f, 0.0f,
+      1.0f, 0.0f, 1.0f,
+      0.0f, 0.0f, 1.0f,
 
-	/** VAO(s) */ 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	//  Attrib
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Position);
-	glVertexAttribPointer(attribPos, 3, GL_FLOAT, GL_FALSE, GL_CALC_STRIDE(0), GL_CALC_OFFSET(0));
-	glEnableVertexAttribArray(attribPos);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Color);
-	glVertexAttribPointer(attribColor, 3, GL_FLOAT, GL_FALSE, GL_CALC_STRIDE(0), GL_CALC_OFFSET(0));
-	glEnableVertexAttribArray(attribColor);
-
-	// SHADER|PROGRAM
-	GLuint frag_shader, vert_shader, program;
-
-	bool can_compile_program = true;
-
-	can_compile_program &= shader_compile(
-		"../src/shaders/triangle_vs.glsl",
-		&vert_shader,
-		GL_VERTEX_SHADER
+      0.0f, 0.0f, 1.0f,
+      0.0f, 1.0f, 1.0f,
+      0.0f, 1.0f, 0.0f
+		}
 	);
+	// End - Colors
 
-	can_compile_program &= shader_compile(
-		"../src/shaders/triangle_fs.glsl",
-		&frag_shader,
-		GL_FRAGMENT_SHADER
+	// Data
+	render.set_data(
+		DATA,
+		"Data_3a",
+		{
+			0.0f,  0.0f,  0.0f,
+      0.33f, 0.50f, 0.0f,
+     -0.33f, 0.50f, 0.0f,
+
+      0.0f, 1.0f, 1.0f,
+      0.0f, 1.0f, 1.0f,
+      0.0f, 1.0f, 1.0f
+		}
 	);
+	// End - Data
 
-	if (!can_compile_program) return -1;
+	// Attrib
+	// Ex - 1
+	render.bind_vertex("VAO_1");
+	render.bind_buffer(POSITION, "VBO_Position_1", "Positions_1");
+	render.vbo_attrib("VBO_Position_1", 0, 0, 0);
+	//
+	// Ex - 2
+	render.bind_vertex("VAO_2");
+	render.bind_buffer(POSITION, "VBO_Position_2", "Positions_2");
+	render.vbo_attrib("VBO_Position_2", 0, 0, 0);
+	//
+	// Ex - 3a
+	render.bind_vertex("VAO_3a");
+	render.bind_buffer(DATA, "VBO_Data_3a", "Data_3a");
+	render.vbo_attrib("VBO_Data_3a", 0, 0, 0);
+	render.vbo_attrib("VBO_Data_3a", 1, 0, 9);
+	//
+	// Ex - 3b
+	render.bind_vertex("VAO_3b");
+	render.bind_buffer(POSITION, "VBO_Position_3b", "Positions_3b");
+	render.bind_buffer(COLOR, "VBO_Color_3b", "Colors_3b");
+	render.vbo_attrib("VBO_Position_3b", 0, 0, 0);
+	render.vbo_attrib("VBO_Color_3b", 1, 0, 0);
+	//
+	// End - Attrib
 
-	if (!create_program(&program, vert_shader, frag_shader)) return -1;
+	bool show_1 = false,
+			 show_2 = false, 
+			 show_3a = false, 
+			 show_3b = false;
 
-	// Uniform vars assign
-	// GLfloat R = 0.0f, G = 1.0f, B = 200.0f;
-	// GLint colorLoc = glGetUniformLocation(program, "inputColor");
-	// if (colorLoc > -1) glUniform4f(colorLoc, R, G, B, 1.0f);
-	// End - Uniform vars assign
-
-	glDeleteShader(vert_shader);
-	glDeleteShader(frag_shader);
-
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(app->get_window()))
 	{
-		gl_config::frames_per_second(window);
-		callback_window::process_input(window);
+		if (show_fps) Application::frames_per_second(app->get_window());
+		Application::process_input(app->get_window());
 
-		glClearColor(0.33f, 0.1f, 0.5f, 0.5f);
+		if (glfwGetKey(app->get_window(), GLFW_KEY_Q) == GLFW_PRESS) show_1 = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_A) == GLFW_PRESS) show_1 = true;
+
+		if (glfwGetKey(app->get_window(), GLFW_KEY_W) == GLFW_PRESS) show_2 = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_S) == GLFW_PRESS) show_2 = true;
+
+		if (glfwGetKey(app->get_window(), GLFW_KEY_E) == GLFW_PRESS) show_3a = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_D) == GLFW_PRESS) show_3a = true;
+
+		if (glfwGetKey(app->get_window(), GLFW_KEY_R) == GLFW_PRESS) show_3b = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_F) == GLFW_PRESS) show_3b = true;
+		
+		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(program);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
+		if (show_1)
+		{
+			GLint colorLoc = glGetUniformLocation(
+				Resources::get_current_shaders()["shader_uniform"].getProgram(),
+				"inputColor"
+			);
+			glUseProgram(Resources::get_current_shaders()["shader_uniform"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_1"]);
+			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 0.0f, 0.0f, 1.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(0);
+		}
 
-		glfwSwapBuffers(window);
+		if (show_2)
+		{
+			GLint colorLoc = glGetUniformLocation(
+				Resources::get_current_shaders()["shader_uniform"].getProgram(),
+				"inputColor"
+			);
+			glUseProgram(Resources::get_current_shaders()["shader_uniform"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_2"]);
+			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_LINE_LOOP, 3, 6);
+			
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 1.0f, 1.0f, 1.0f);
+			glDrawArrays(GL_LINE_LOOP, 6, 9);
+
+			glBindVertexArray(0);
+		}
+
+		if (show_3a)
+		{
+			glUseProgram(Resources::get_current_shaders()["shader"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_3a"]);
+  		glDrawArrays(GL_TRIANGLES, 0, 3);
+			glBindVertexArray(0);
+		}
+
+		if (show_3b)
+		{
+			glLineWidth(15);
+			glPointSize(10);
+
+			glUseProgram(Resources::get_current_shaders()["shader"].getProgram());
+			glBindVertexArray(render.get_vaos()["VAO_3b"]);
+  		glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(0);
+		}
+
+		glfwSwapBuffers(app->get_window());
 		glfwPollEvents();
 	}
 
-	glDeleteProgram(program);
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO_Position);
-	glDeleteBuffers(1, &VBO_Color);
-
+	Resources::clean();
+	render.clean();
+	delete app, render;
 	glfwTerminate();
 	return 0;
 }
