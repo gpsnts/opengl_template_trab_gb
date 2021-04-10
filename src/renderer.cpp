@@ -10,9 +10,14 @@ std::map<std::string, GLuint> Renderer::get_vbos()
 	return vbos;
 }
 
-std::map<std::string, GLuint> Renderer::get_layout_indexes()
+std::map<std::string, GLuint> Renderer::get_ebos()
 {
-	return layout_indexes;
+	return ebos;
+}
+
+std::map<std::string, std::vector<GLuint>> Renderer::get_ebos_indexes()
+{
+	return ebos_indexes;
 }
 
 std::map<std::string, std::vector<GLfloat>> Renderer::get_data()
@@ -30,7 +35,7 @@ std::map<std::string, std::vector<GLfloat>> Renderer::get_colors()
 	return colors;
 }
 
-bool Renderer::set_data(
+void Renderer::set_data(
 	Type selected,
 	string key_selected,
 	std::initializer_list<GLfloat> payload
@@ -42,32 +47,99 @@ bool Renderer::set_data(
 	{
 	case DATA:
 		data[key_selected].assign(payload);
-		return true;
 	case POSITION:
 		positions[key_selected].assign(payload);
-		return true;
 	case COLOR:
 		colors[key_selected].assign(payload);
-		return true;
 	default:
-		return false;
+		return;
 	}
 }
 
-// TODO: Refatorar -- !!! HARD-CODED
-void Renderer::bind_buffer(Type type, string key_buffer, string key_array)
+void Renderer::set_ebo_data(
+	string key_selected,
+	std::initializer_list<GLuint> payload
+)
 {
-	GLfloat clone[type == DATA ? data[key_array].size() : type == POSITION ? positions[key_array].size() : colors[key_array].size()];
-	
-	std::copy(
-		type == DATA ? data[key_array].begin() : type == POSITION ? positions[key_array].begin() : colors[key_array].begin(),
-		type == DATA ? data[key_array].end() : type == POSITION ? positions[key_array].end() : colors[key_array].end(),
-		clone
-	);
+	ebos_indexes[key_selected].assign(payload);
+}
 
+void Renderer::bind_buffer(
+	Type type,
+	string key_buffer,
+	string key_array
+)
+{
+	size_t size = -1;
+
+	switch (type)
+	{
+	case DATA:
+		size = data[key_array].size();
+		break;
+	case POSITION:
+		size = positions[key_array].size();
+		break;
+	case COLOR:
+		size = colors[key_array].size();
+		break;
+	default:
+		cout << "ERROR - Getting Type vector size" << endl;
+		return;
+	}
+	
+	GLfloat clone[size];
+
+	switch (type)
+	{
+	case DATA:
+		 std::copy(
+			data[key_array].begin(),
+			data[key_array].end(),
+			clone
+		);
+		break;
+	case POSITION:
+		std::copy(
+			positions[key_array].begin(),
+			positions[key_array].end(),
+			clone
+		);
+		break;
+	case COLOR:
+		std::copy(
+			colors[key_array].begin(),
+			colors[key_array].end(),
+			clone
+		);
+		break;
+	default:
+		cout << "ERROR - Cloning vec to array" << endl;
+		return;
+	}
+         
 	glGenBuffers(1, &vbos[key_buffer]);
 	glBindBuffer(GL_ARRAY_BUFFER, vbos[key_buffer]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(clone), clone, GL_STATIC_DRAW);
+}
+
+void Renderer::bind_ebo_buffer(
+	string key_ebo_buffer,
+	string key_array
+)
+{
+	size_t size =  ebos_indexes[key_array].size();
+	GLuint clone[size];
+
+	std::copy(
+		ebos_indexes[key_array].begin(),
+		ebos_indexes[key_array].end(),
+		clone
+	);
+
+	glGenBuffers(1, &ebos[key_ebo_buffer]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebos[key_ebo_buffer]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(clone), clone, GL_STATIC_DRAW);
 }
 
 
@@ -105,5 +177,10 @@ void Renderer::clean()
 	for (auto vbo : vbos)
 	{
 		glDeleteBuffers(1, &vbo.second);
+	}
+
+	for (auto ebo : ebos)
+	{
+		glDeleteBuffers(1, &ebo.second);
 	}
 }

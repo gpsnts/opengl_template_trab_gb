@@ -12,13 +12,16 @@
 #include <numeric>
 #include <initializer_list> // "inline array"
 
+#include "pch/glfw_pch.hpp"
+
 #include <iostream>
 using namespace std;
 
 enum Type {
 	DATA,
 	POSITION,
-	COLOR
+	COLOR,
+	INDEXES
 };
 
 class Renderer
@@ -26,31 +29,48 @@ class Renderer
 private:
 	std::map<std::string, GLuint> vaos;
 	std::map<std::string, GLuint> vbos;
-	std::map<std::string, GLuint> layout_indexes;
+	std::map<std::string, GLuint> ebos;
 
+	std::map<std::string, std::vector<GLuint>> ebos_indexes;
 	std::map<std::string, std::vector<GLfloat>> data;
 	std::map<std::string, std::vector<GLfloat>> positions;
 	std::map<std::string, std::vector<GLfloat>> colors;
 public:
 	Renderer() 
-	: vaos(), vbos(), layout_indexes(),
-		data(), positions(), colors() {};
+	: vaos(), vbos(), ebos(),
+		ebos_indexes(), data(), positions(), colors() {};
 
 	std::map<std::string, GLuint> get_vaos();
 	std::map<std::string, GLuint> get_vbos();
-	std::map<std::string, GLuint> get_layout_indexes();
+	std::map<std::string, GLuint> get_ebos();
 
+	std::map<std::string, std::vector<GLuint>> get_ebos_indexes();
 	std::map<std::string, std::vector<GLfloat>> get_data();
 	std::map<std::string, std::vector<GLfloat>> get_positions();
 	std::map<std::string, std::vector<GLfloat>> get_colors();
 
-	bool set_data(
+	void set_data(
 		Type selected,
 		string key_selected,
 		std::initializer_list<GLfloat> payload
 	);
 
-	void bind_buffer(Type type, string key_buffer, string key_array);
+	void set_ebo_data(
+		string key_selected,
+		std::initializer_list<GLuint> payload
+	);
+
+	void bind_buffer(
+		Type type,
+		string key_buffer,
+		string key_array
+	);
+
+	void bind_ebo_buffer(
+		string key_ebo_buffer,
+		string key_array
+	);
+
 	void bind_vertex(string key_vertex);
 
 	void vbo_attrib(
