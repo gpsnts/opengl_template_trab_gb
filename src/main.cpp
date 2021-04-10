@@ -116,10 +116,10 @@ int main(int argc, char *argv[])
 		POSITION,
 		"Positions_4",
 		{
-			0.5f,  0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-		 -0.5f, -0.5f, 0.0f,
-		 -0.5f,  0.5f, 0.0f 
+			0.33f,  0.33f, 0.0f,
+			0.50f, -0.50f, 0.0f,
+		 -0.50f, -0.50f, 0.0f,
+		 -0.33f,  0.33f, 0.0f 
 		}
 	);
 
@@ -257,6 +257,10 @@ int main(int argc, char *argv[])
 			glBindVertexArray(render.get_vaos()["VAO_4"]);
 			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 0.0f, 1.0f, 1.0f);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 0.0f, 0.0f, 10.0f);
+			glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
+
 			glBindVertexArray(0);
 		}
 
