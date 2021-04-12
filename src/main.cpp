@@ -9,42 +9,6 @@
 #define WIDTH 600
 #define APP_NAME "Test"
 
-// Ex - 5
-// Using shader with uniform color attrib -- using EBO
-// void drawCircle(Renderer render)
-// {
-// 	GLfloat pos_x = 0.0f, pos_y = 0.0f;
-// 	GLfloat radius = 0.05f;
-
-// 	GLuint N = 360;
-
-// 	GLfloat DELTA_ANGLE = M_PI / N;
-// 	GLfloat CURR_ANGLE = -2 * DELTA_ANGLE;
-
-//   GLfloat VERTICES[N * 3];
-
-// 	for (int i = 0; i < N * 3; i += 3)
-// 	{
-//   	VERTICES[i] = pos_y + sin(CURR_ANGLE) * radius;
-//   	VERTICES[i + 1] = pos_x + cos(CURR_ANGLE) * radius;
-//   	VERTICES[i + 2] = 0.0f;
-//   	CURR_ANGLE += 2 * DELTA_ANGLE;
-//   }
-
-// 	GLuint INDICES[3 * (N - 2)];
-
-//   int K = 1;
-//   for (int i = 0; i < 3 * (N - 2) - 2; i += 3) {
-//     INDICES[i] = 0;
-//     INDICES[i + 1] = K;
-//     INDICES[i + 2] = K + 1;
-//     ++K;
-//   }
-
-// 	render.bind_vertex("VAO_5");
-// }
-// End - Ex - 5
-
 int main(int argc, char *argv[])
 {
 	bool show_fps = false;
@@ -52,97 +16,118 @@ int main(int argc, char *argv[])
 	if (argc >= 2)
 	{
 		string show_fps_flag(argv[1]);
-		if (show_fps_flag == "show_fps")
-			show_fps = true;
+		if (show_fps_flag == "show_fps") show_fps = true;
 	}
 
 	Application *app = new Application(HEIGHT, WIDTH, APP_NAME);
 	Renderer render;
 
-	if (!app->init())
-		return -1;
+	if (!app->init()) return -1;
 
 	Resources::assign_shader(
-			"../src/shaders/triangle.vert",
-			"../src/shaders/triangle.frag",
-			"shader");
+		"../src/shaders/triangle.vert",
+		"../src/shaders/triangle.frag",
+		"shader"
+	);
 
 	Resources::assign_shader(
-			"../src/shaders/triangle.vert",
-			"../src/shaders/triangle_uniform.frag",
-			"shader_uniform");
+		"../src/shaders/triangle.vert",
+		"../src/shaders/triangle_uniform.frag",
+		"shader_uniform"
+	);
 
 	render.set_data(
-			POSITION,
-			"Positions_1",
-			{0.0f, 0.0f, 0.0f,
+		POSITION,
+		"Positions_1",
+		{
+			 0.0f, 0.0f, 0.0f,
 			 0.33f, 0.50f, 0.0f,
-			 -0.33f, 0.50f, 0.0f,
+			-0.33f, 0.50f, 0.0f,
 
 			 0.0f, 0.0f, 0.0f,
-			 -0.33f, -0.50f, 0.0f,
-			 0.33f, -0.50f, 0.0f});
+			-0.33f, -0.50f, 0.0f,
+			 0.33f, -0.50f, 0.0f
+		}
+	);
 
 	render.set_data(
-			POSITION,
-			"Positions_2",
-			{0.0f, 0.0f, 0.0f,
+		POSITION,
+		"Positions_2",
+		{
+			 0.0f, 0.0f, 0.0f,
 			 0.33f, 0.50f, 0.0f,
-			 -0.33f, 0.50f, 0.0f,
+			-0.33f, 0.50f, 0.0f,
 
 			 0.0f, 0.0f, 0.0f,
-			 -0.33f, -0.50f, 0.0f,
+			-0.33f, -0.50f, 0.0f,
 			 0.33f, -0.50f, 0.0f,
 
 			 0.0f, 0.0f, 0.0f,
 			 0.33f, 0.50f, 0.0f,
-			 0.33f, -0.50f, 0.0f});
+			 0.33f, -0.50f, 0.0f
+		}
+	);
 
 	render.set_data(
-			POSITION,
-			"Positions_3b",
-			{0.0f, 0.0f, 0.0f,
-			 0.33f, 0.50f, 0.0f,
-			 -0.33f, 0.50f, 0.0f,
+		POSITION,
+		"Positions_3b",
+		{
+		 	 0.0f, 0.0f, 0.0f,
+		   0.33f, 0.50f, 0.0f,
+		  -0.33f, 0.50f, 0.0f,
 
+		   0.0f, 0.0f, 0.0f,
+		  -0.33f, -0.50f, 0.0f,
+		   0.33f, -0.50f, 0.0f
+		}
+	);
+
+	render.set_data(
+		COLOR,
+		"Colors_3b",
+		{
+			1.0f, 0.0f, 0.0f,
+		 	1.0f, 0.0f, 1.0f,
+		 	0.0f, 0.0f, 1.0f,
+
+		 	0.0f, 0.0f, 1.0f,
+		 	0.0f, 1.0f, 1.0f,
+		 	0.0f, 1.0f, 0.0f
+		}
+	);
+
+	render.set_data(
+		DATA,
+		"Data_3a",
+		{
 			 0.0f, 0.0f, 0.0f,
-			 -0.33f, -0.50f, 0.0f,
-			 0.33f, -0.50f, 0.0f});
+		   0.33f, 0.50f, 0.0f,
+		  -0.33f, 0.50f, 0.0f,
+
+		   0.0f, 1.0f, 1.0f,
+		   0.0f, 1.0f, 1.0f,
+		   0.0f, 1.0f, 1.0f
+		}
+	);
 
 	render.set_data(
-			COLOR,
-			"Colors_3b",
-			{1.0f, 0.0f, 0.0f,
-			 1.0f, 0.0f, 1.0f,
-			 0.0f, 0.0f, 1.0f,
-
-			 0.0f, 0.0f, 1.0f,
-			 0.0f, 1.0f, 1.0f,
-			 0.0f, 1.0f, 0.0f});
-
-	render.set_data(
-			DATA,
-			"Data_3a",
-			{0.0f, 0.0f, 0.0f,
-			 0.33f, 0.50f, 0.0f,
-			 -0.33f, 0.50f, 0.0f,
-
-			 0.0f, 1.0f, 1.0f,
-			 0.0f, 1.0f, 1.0f,
-			 0.0f, 1.0f, 1.0f});
-
-	render.set_data(
-			POSITION,
-			"Positions_4",
-			{0.33f, 0.33f, 0.0f,
-			 0.50f, -0.50f, 0.0f,
-			 -0.50f, -0.50f, 0.0f,
-			 -0.33f, 0.33f, 0.0f});
+		POSITION,
+		"Positions_4",
+		{
+			 0.33f, 0.33f, 0.0f,
+		 	 0.50f, -0.50f, 0.0f,
+		 	-0.50f, -0.50f, 0.0f,
+		 	-0.33f, 0.33f, 0.0f
+		}
+	);
 
 	render.set_ebo_data(
-			"EBO_4",
-			{0, 1, 3,
-			 1, 2, 3});
+		"EBO_4",
+		{
+			0, 1, 3,
+			1, 2, 3
+		}
+	);
 
 	// Attrib
 	// Ex - 1
@@ -177,13 +162,9 @@ int main(int argc, char *argv[])
 	// End - Attrib
 
 	// Ex - 5
-	GLfloat pos_x = 0.0f, pos_y = 0.0f;
-	GLfloat radius = 0.5f;
-
 	GLuint N = 360;
-
-	GLfloat DELTA_ANGLE = M_PI / N;
-	GLfloat CURR_ANGLE = DELTA_ANGLE;
+	GLfloat pos_x = 0.0f, pos_y = 0.0f, radius = 0.5f;
+	GLfloat DELTA_ANGLE = M_PI / N, CURR_ANGLE = DELTA_ANGLE;
 
 	// e.g [x, y, z] para funcionar como as matrizes "vetorizadas" da OpenGL 
   GLfloat VERTICES[N * 3];
@@ -221,13 +202,48 @@ int main(int argc, char *argv[])
 	//
 	// End - Ex - 5
 
+	// Ex - 7
+	render.set_data(
+		POSITION,
+		"Positions_7_Telhado",
+		{
+			-0.5f, 0.25f, 0.0f,  
+       0.5f, 0.25f, 0.0f, 
+       0.0f, 0.75f, 0.0f
+		}
+	);
+
+	render.set_data(
+		POSITION,
+		"Positions_7_Casa",
+		{
+			-0.5f, 0.75f, 0.0f,
+       0.5f, 0.75f, 0.0f, 
+       0.5f, 1.25f, 0.0f,
+
+			-0.5f, 0.75f, 0.0f,
+			 0.5f, 1.25f, 0.0f,
+			-0.5f, 1.25f, 0.0f
+		}
+	);
+
+	render.bind_vertex("VAO_7_Telhado");
+	render.bind_buffer(POSITION, "VBO_Positions_7_Telhado", "Positions_7_Telhado");
+	render.vbo_attrib("VBO_Positions_7_Telhado", 0, 0, 0);
+
+	render.bind_vertex("VAO_7_Telhado");
+	render.bind_buffer(POSITION, "VBO_Positions_7_Casa", "Positions_7_Casa");
+	render.vbo_attrib("VBO_Positions_7_Casa", 0, 0, 0);
+	//
+	// End - Ex - 7
 
 	bool show_1 = false,
 			 show_2 = false,
 			 show_3a = false,
 			 show_3b = false,
 			 show_4 = false,
-			 show_5 = false;
+			 show_5 = false,
+			 show_7 = true;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
@@ -251,6 +267,9 @@ int main(int argc, char *argv[])
 
 		if (glfwGetKey(app->get_window(), GLFW_KEY_Y) == GLFW_PRESS) show_5 = false;
 		if (glfwGetKey(app->get_window(), GLFW_KEY_H) == GLFW_PRESS) show_5 = true;
+
+		if (glfwGetKey(app->get_window(), GLFW_KEY_U) == GLFW_PRESS) show_7 = false;
+		if (glfwGetKey(app->get_window(), GLFW_KEY_J) == GLFW_PRESS) show_7 = true;
 
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -329,6 +348,24 @@ int main(int argc, char *argv[])
 			glBindVertexArray(render.get_vaos()["VAO_5"]);
 			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 0.0f, 1.0f, 10.0f);
 			glDrawElements(GL_TRIANGLES, 3 * (N - 2), GL_UNSIGNED_INT, nullptr);
+			glBindVertexArray(0);
+		}
+
+		if (show_7)
+		{
+			GLint colorLoc = glGetUniformLocation(
+				Resources::get_current_shaders()["shader_uniform"].getProgram(),
+				"inputColor"
+			);
+			glUseProgram(Resources::get_current_shaders()["shader_uniform"].getProgram());
+			// Telhado
+			glBindVertexArray(render.get_vaos()["VAO_7_Telhado"]);
+			if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 0.0f, 0.0f, 10.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+			// Casa
+			glBindVertexArray(render.get_vaos()["VAO_7_Casa"]);
+			if (colorLoc > -1) glUniform4f(colorLoc, 0.0f, 1.0f, 0.0f, 10.0f);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
 			glBindVertexArray(0);
 		}
 
