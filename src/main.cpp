@@ -237,13 +237,13 @@ int main(int argc, char *argv[])
 	//
 	// End - Ex - 7
 
-	bool show_1 = false,
+	bool show_1 = true,
 			 show_2 = false,
 			 show_3a = false,
 			 show_3b = false,
 			 show_4 = false,
 			 show_5 = false,
-			 show_7 = true;
+			 show_7 = false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
