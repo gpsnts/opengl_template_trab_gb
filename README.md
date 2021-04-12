@@ -16,9 +16,9 @@ Tested only in Linux!
 
 ## **Running**
 
-Almost everything is automated just by running `./run`. To more info, read the script
+Everything is automated just by running `./run`. To more info, read the script
 
-Add a `show_fps` to show this infos about the app. E.g `./run show_fps`
+Add a `show_fps` arg to show info about the app. E.g `./run show_fps`
 
 ## Show exercises
 
