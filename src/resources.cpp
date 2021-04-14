@@ -15,15 +15,15 @@ Shader Resources::assign_shader(
 	return shaders[key_shader];
 }
 
+Shader Resources::get_shader(string key_shader)
+{
+	return shaders[key_shader];
+}
+
 void Resources::clean()
 {
 	for (auto iter_shaders : shaders)
 	{
 		glDeleteProgram(iter_shaders.second.getProgram());
 	}
-}
-
-std::map<std::string, Shader> Resources::get_current_shaders()
-{
-	return shaders;
 }

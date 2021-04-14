@@ -11,7 +11,6 @@
 #include "pch/glfw_pch.hpp"
 
 using namespace std;
-
 class Shader
 {
 private:
