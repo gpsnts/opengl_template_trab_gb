@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 	}
 
 	Application *app = new Application(HEIGHT, WIDTH, APP_NAME);
-	Game game;
+	Game *game = new Game();
 
 	if (!app->init()) return -1;
 
-	game.init();
+	game->init();
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
@@ -35,27 +35,15 @@ int main(int argc, char *argv[])
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// if (show_5)
-		// {
-		// 	GLint colorLoc = glGetUniformLocation(
-		// 		Resources::get_current_shaders()["shader_uniform"].getProgram(),
-		// 		"inputColor"
-		// 	);
-		// 	glUseProgram(Resources::get_current_shaders()["shader_uniform"].getProgram());
-		// 	glBindVertexArray(render.get_vaos()["VAO_5"]);
-		// 	if (colorLoc > -1) glUniform4f(colorLoc, 1.0f, 0.0f, 1.0f, 10.0f);
-		// 	glDrawElements(GL_TRIANGLES, 3 * (N - 2), GL_UNSIGNED_INT, nullptr);
-		// 	glBindVertexArray(0);
-		// }
-
-		game.build();
+		game->build();
 
 		glfwSwapBuffers(app->get_window());
 		glfwPollEvents();
 	}
 
-	delete app;
+	delete game, app;
 	Resources::clean();
 	glfwTerminate();
-	return 0;
+
+	return EXIT_SUCCESS;
 }

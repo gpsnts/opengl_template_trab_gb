@@ -10,7 +10,6 @@
 class Game
 {
 private:
-	Render *render;
 public:
 	~Game();
 	Game() {};
