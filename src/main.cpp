@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
 
 	if (!app->init()) return -1;
 
+	game.init();
+
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
@@ -52,6 +54,7 @@ int main(int argc, char *argv[])
 		glfwPollEvents();
 	}
 
+	delete app;
 	Resources::clean();
 	glfwTerminate();
 	return 0;

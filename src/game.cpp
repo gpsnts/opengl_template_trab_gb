@@ -2,8 +2,7 @@
 
 Game::~Game()
 {
-	std::cout << "Destruct game" << std::endl;
-	Resources::clean();
+	delete render;
 }
 
 void Game::init()
@@ -13,4 +12,13 @@ void Game::init()
 		"../src/shaders/triangle_uniform.frag",
 		"shader_uniform"
 	);
+
+	Shader selected_shader = Resources::get_shader("shader_uniform");
+	
+	render = new Render(selected_shader);
+	render->render_data({1.0, 1.0}, {});
+	
+	delete render;
 }
+
+void Game::build() {}

@@ -24,6 +24,7 @@ void Resources::clean()
 {
 	for (auto iter_shaders : shaders)
 	{
+		std::cout << "Deleting - " << iter_shaders.first << std::endl;
 		glDeleteProgram(iter_shaders.second.getProgram());
 	}
 }
