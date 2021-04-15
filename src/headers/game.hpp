@@ -19,6 +19,7 @@ public:
 	~Game();
 	Game() {};
 
+	void transformations();
 	void init();
 	void build();
 

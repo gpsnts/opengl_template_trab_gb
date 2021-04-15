@@ -23,46 +23,20 @@ int main(int argc, char *argv[])
 	if (!app->init()) return -1;
 
 	game->init();
-
-	glm::mat4 model(1.0f);
-	cout << "TO string 1 -- \n" << glm::to_string(model) << endl; 
-	model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
-	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	cout << "TO string 2 -- \n" << glm::to_string(model) << endl;
-
-	glUseProgram(game->get_shader().getProgram());
-	glUniformMatrix4fv(glGetUniformLocation(game->get_shader().getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-	glUseProgram(0);
 	
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
 		Application::process_input(app->get_window());
 
+		game->transformations();
+
 		glfwPollEvents();
 
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// game->build();
-		glUseProgram(game->get_shader().getProgram());
-
-		model = glm::rotate(model, glm::radians(90.0f * 1.01f), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(glGetUniformLocation(game->get_shader().getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-		GLint colorLoc = glGetUniformLocation(
-			game->get_shader().getProgram(),
-			"inputColor"
-		);
-
-		glUniform4f(colorLoc, 1.f, 0.f, 0.f, 1.f);
-
-		glBindVertexArray(game->get_render()->get_vao());
-
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-		glUseProgram(0);
+		game->build();
 
 		glfwSwapBuffers(app->get_window());
 	}
