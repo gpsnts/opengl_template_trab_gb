@@ -1,12 +1,10 @@
-#include <cmath>
-
 #include "headers/shader.hpp"
 #include "headers/resources.hpp"
 #include "headers/application.hpp"
 #include "headers/game.hpp"
 
-#define HEIGHT 800
-#define WIDTH 600
+#define HEIGHT 768
+#define WIDTH 1366
 #define APP_NAME "Test"
 
 int main(int argc, char *argv[])
@@ -26,28 +24,39 @@ int main(int argc, char *argv[])
 
 	game->init();
 
+	glm::mat4 model(1.0f);
+	cout << "TO string 1 -- \n" << glm::to_string(model) << endl; 
+	model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	cout << "TO string 2 -- \n" << glm::to_string(model) << endl;
+
+	glUseProgram(game->get_shader().getProgram());
+	glUniformMatrix4fv(glGetUniformLocation(game->get_shader().getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+	glUseProgram(0);
+	
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
 		Application::process_input(app->get_window());
 
+		glfwPollEvents();
+
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// game->build();
 		glUseProgram(game->get_shader().getProgram());
 
-		// GLuint modelLoc = glGetUniformLocation(game->get_shader().getProgram(), "model");
-		// glm::mat4 trans = glm::mat4(1.0f);
-		// trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-		// GLuint transformLoc = glGetUniformLocation(game->get_shader().getProgram(), "transform");
-		// glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-		
+		model = glm::rotate(model, glm::radians(90.0f * 1.01f), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(glGetUniformLocation(game->get_shader().getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+
 		GLint colorLoc = glGetUniformLocation(
 			game->get_shader().getProgram(),
 			"inputColor"
 		);
-		glUniform4f(colorLoc, 1.0f, 1.0f, 0.0f, 1.0f);
+
+		glUniform4f(colorLoc, 1.f, 0.f, 0.f, 1.f);
 
 		glBindVertexArray(game->get_render()->get_vao());
 
@@ -56,8 +65,6 @@ int main(int argc, char *argv[])
 		glUseProgram(0);
 
 		glfwSwapBuffers(app->get_window());
-
-		glfwPollEvents();
 	}
 
 	delete game, app;

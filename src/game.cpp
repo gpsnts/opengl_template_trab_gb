@@ -32,9 +32,12 @@ void Game::init()
 	render = new Render(selected_shader);
 	render->render_data(
 		{
-			 0.0f, 0.0f, 0.0f,
-			 0.33f, 0.50f, 0.0f,
-			-0.33f, 0.50f, 0.0f
+			-1.f, -1.f, 0.f,
+			1.f, -1.f, 0.f,
+			0.f, 1.f, 0.f
+			//  0.0f, 0.0f, 0.0f,
+			//  0.33f, 0.50f, 0.0f,
+			// -0.33f, 0.50f, 0.0f
 		},
 		{}
 	);
