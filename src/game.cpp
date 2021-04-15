@@ -40,29 +40,5 @@ void Game::init()
 	);
 }
 
-int c_flag = 0; 
-
-bool flag = true;
-
 void Game::build() {
-	if (c_flag % 200 == 0) flag = !flag;
-
-	// GLint colorLoc = glGetUniformLocation(
-	// 	selected_shader.getProgram(),
-	// 	"inputColor"
-	// );
-
-	// glUseProgram(selected_shader.getProgram());
-
-	// glBindVertexArray(render->get_vao());
-	
-	// if (colorLoc > -1)
-	// {
-	// 	if (flag) glUniform4f(colorLoc, 1.0f, 0.0f, 0.0f, 10.0f);
-	// 	else glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 10.0f);
-	// }
-	// glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	// glBindVertexArray(0);
-	// glUseProgram(0);
 }
