@@ -15,11 +15,17 @@
 class Game
 {
 private:
+	GLint ref_height, ref_width;
 public:
 	~Game();
-	Game() {};
+	Game(GLint s_height, GLint s_width) {
+		this->ref_height = s_height;
+		this->ref_width = s_width;
+	};
 
-	void transformations();
+	void events(GLFWwindow *window);
+	void projection(bool enabled = false);
+	void transformations(bool enabled = false);
 	void init();
 	void build();
 
