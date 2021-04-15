@@ -35,14 +35,6 @@ public:
 		initializer_list<GLfloat> data,
 		initializer_list<GLuint> ebo_indexes
 	);
-	
-	void render_data(
-		initializer_list<GLfloat> vertices,
-		initializer_list<GLfloat> colors,
-		initializer_list<GLuint> ebo_indexes
-	);
-
-	// TODO: Texture Draw
 };
 
 #endif // __RENDER_HPP__

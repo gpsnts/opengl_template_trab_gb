@@ -79,12 +79,3 @@ void Render::render_data(
 	// TODO: Pass attribs by a vector and iterate this functions with thoso attribs
 	this->vbo_attrib(0, 0, 0);
 }
-
-void Render::render_data(
-	initializer_list<GLfloat> vertices,
-	initializer_list<GLfloat> colors,
-	initializer_list<GLuint> ebo
-)
-{
-	
-}
