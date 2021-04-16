@@ -1,5 +1,9 @@
 # **opengl_template**
 
+## **Resposta 3**
+
+Objetos "renderizados" nessa configuração de projeção ortogonal, ao contrário de uma configuração 1:1 ("normal") são reduzidos ao ponto de ser praticamente invísivel devido ao seu tamanho relativo a janela. No caso, como o viewport está com o (x, y) nas coordenadas (0, 0). Este, mesmo que de forma praticamente imperceptível, está "fixado" no caso superior direito.
+
 ## **IMPORTANT**
 
 Tested only in Linux!
