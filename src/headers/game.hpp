@@ -42,7 +42,11 @@ public:
 	};
 
 	void events(GLFWwindow *window);
-	void projection(bool enabled = false, bool aspect_projection = false);
+	void projection(
+		bool aspect_correction = true,
+		bool ex1 = false,
+		bool ex2 = false
+	);
 	void transformations(bool enabled = false);
 	void init();
 	void build();

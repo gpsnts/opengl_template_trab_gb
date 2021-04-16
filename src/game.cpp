@@ -24,7 +24,7 @@ Game::~Game()
 	delete render;
 }
 
-void Game::projection(bool enabled, bool aspect_correction)
+void Game::projection(bool aspect_correction, bool ex1, bool ex2)
 {
 	glm::mat4 projection(1.0f);
 	glm::mat4 aspect(1.f);
@@ -57,7 +57,23 @@ void Game::projection(bool enabled, bool aspect_correction)
 		}
 	}
 	
-	if (enabled)
+	if (ex1)
+	{
+		projection = glm::ortho(
+			-10.f, 	10.f,	 // X (min-max)
+			-10.f, 	10.f,	 // Y (min-max)
+			 -1.f,   1.f   // Z (min-max)
+		);
+	}
+	else if (ex2)
+	{
+		projection = glm::ortho(
+			  0.f,	800.f,	// X (min-max)
+			600.f, 		0.f,	// Y (min-max)
+			 -1.f,  	1.f   // Z (min-max)
+		);
+	}
+	else
 	{
 		projection = glm::ortho(
 			-1.f, 	1.f,	// X (min-max)
@@ -106,9 +122,17 @@ void Game::init()
 	render = new Render(selected_shader);
 	render->render_data(
 		{
-			this->x1.x, this->x1.y, this->x1.z,
-			this->x2.x, this->x2.y, this->x2.z,
-			this->x3.x, this->x3.y, this->x3.z 
+			this->x1.x, 
+			this->x1.y,
+			this->x1.z,
+			
+			this->x2.x,
+			this->x2.y,
+			this->x2.z,
+
+			this->x3.x,
+			this->x3.y,
+			this->x3.z 
 		},
 		{}
 	);
@@ -133,5 +157,18 @@ void Game::build() {
 
 void Game::events(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) cout << "Pressed A" << endl;
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) cout << "Pressed Q" << endl;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	cout << "Pressed A" << endl;
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)	cout << "Pressed W" << endl;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	cout << "Pressed W" << endl;
+	
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)	cout << "Pressed E" << endl;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	cout << "Pressed D" << endl;
+	
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)	cout << "Pressed R" << endl;
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)	cout << "Pressed F" << endl;
+
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)	cout << "Pressed T" << endl;
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)	cout << "Pressed G" << endl;
 }
