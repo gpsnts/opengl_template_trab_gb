@@ -24,11 +24,13 @@ public:
 	};
 
 	void events(GLFWwindow *window);
-	void projection(bool enabled = false);
+	void projection(bool enabled = false, bool aspect_projection = false);
 	void transformations(bool enabled = false);
 	void init();
 	void build();
 
+	GLint get_height();
+	GLint get_width();
 	Render *get_render();
 	Shader get_shader();
 };
