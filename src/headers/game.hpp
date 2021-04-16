@@ -20,14 +20,14 @@ struct Vertex {
 	GLfloat z;
 };
 
-class GameObject
+class Game
 {
 private:
 	GLint ref_height, ref_width;
 	Vertex x1, x2, x3;
 public:
-	~GameObject();
-	GameObject(
+	~Game();
+	Game(
 		GLint s_height,
 		GLint s_width,
 		Vertex s_x1,

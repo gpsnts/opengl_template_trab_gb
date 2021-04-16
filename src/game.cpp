@@ -1,4 +1,4 @@
-#include "headers/game_object.hpp"
+#include "headers/game.hpp"
 
 Render *render;
 Shader selected_shader;
@@ -8,23 +8,23 @@ void debug_mat4(glm::mat4 to_view)
 	cout << "DEBUG: " << glm::to_string(to_view) << endl;
 }
 
-Render *GameObject::get_render()
+Render *Game::get_render()
 {
 	return render;
 }
 
-Shader GameObject::get_shader()
+Shader Game::get_shader()
 {
 	return selected_shader;
 }
 
-GameObject::~GameObject()
+Game::~Game()
 {
 	cout << "Deleting render" << endl;
 	delete render;
 }
 
-void GameObject::projection(bool enabled, bool aspect_correction)
+void Game::projection(bool enabled, bool aspect_correction)
 {
 	glm::mat4 projection(1.0f);
 	glm::mat4 aspect(1.f);
@@ -75,7 +75,7 @@ void GameObject::projection(bool enabled, bool aspect_correction)
 	);
 }
 
-void GameObject::transformations(bool enabled)
+void Game::transformations(bool enabled)
 {
 	glm::mat4 model(1.0f);
 
@@ -93,7 +93,7 @@ void GameObject::transformations(bool enabled)
 	);
 }
 
-void GameObject::init()
+void Game::init()
 {
 	Resources::assign_shader(
 		"../src/shaders/triangle.vert",
@@ -114,7 +114,7 @@ void GameObject::init()
 	);
 }
 
-void GameObject::build() {
+void Game::build() {
 	glUseProgram(selected_shader.getProgram());
 		
 	GLint colorLoc = glGetUniformLocation(
@@ -131,7 +131,7 @@ void GameObject::build() {
 	glUseProgram(0);
 }
 
-void GameObject::events(GLFWwindow *window)
+void Game::events(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) cout << "Pressed A" << endl;
 }
