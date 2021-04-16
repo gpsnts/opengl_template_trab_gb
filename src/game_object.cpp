@@ -1,4 +1,4 @@
-#include "headers/game.hpp"
+#include "headers/game_object.hpp"
 
 Render *render;
 Shader selected_shader;
@@ -8,35 +8,26 @@ void debug_mat4(glm::mat4 to_view)
 	cout << "DEBUG: " << glm::to_string(to_view) << endl;
 }
 
-GLint Game::get_height()
-{
-	return this->ref_height;
-}
-
-GLint Game::get_width()
-{
-	return this->ref_width;
-}
-
-Render *Game::get_render()
+Render *GameObject::get_render()
 {
 	return render;
 }
 
-Shader Game::get_shader()
+Shader GameObject::get_shader()
 {
 	return selected_shader;
 }
 
-Game::~Game()
+GameObject::~GameObject()
 {
 	cout << "Deleting render" << endl;
 	delete render;
 }
 
-void Game::projection(bool enabled, bool aspect_correction)
+void GameObject::projection(bool enabled, bool aspect_correction)
 {
 	glm::mat4 projection(1.0f);
+	glm::mat4 aspect(1.f);
 
 	if (aspect_correction)
 	{
@@ -49,7 +40,7 @@ void Game::projection(bool enabled, bool aspect_correction)
 		if (this->ref_width >= this->ref_height)
 		{
 			ratio = this->ref_width / (float) this->ref_height;
-			projection =  glm::ortho(
+			aspect =  glm::ortho(
 				xMin * ratio, xMax * ratio,
 				yMin,  				yMax,
 				zNear, 				zFar
@@ -58,7 +49,7 @@ void Game::projection(bool enabled, bool aspect_correction)
 		else
 		{
 			ratio = this->ref_height / (float) this->ref_width;
-			projection = glm::ortho(
+			aspect = glm::ortho(
 				xMin, 				xMax,
 				yMin * ratio, yMax * ratio,
 				zNear, 				zFar
@@ -69,8 +60,8 @@ void Game::projection(bool enabled, bool aspect_correction)
 	if (enabled)
 	{
 		projection = glm::ortho(
-			-10.f, 	10.f,	// X (min-max)
-			-10.f, 	10.f,	// Y (min-max)
+			-1.f, 	1.f,	// X (min-max)
+			-1.f, 	1.f,	// Y (min-max)
 			-1.f,  	1.f   // Z (min-max)
 		);
 	}
@@ -80,17 +71,17 @@ void Game::projection(bool enabled, bool aspect_correction)
 		glGetUniformLocation(selected_shader.getProgram(), "projection"),
 		1,
 		GL_FALSE,
-		glm::value_ptr(projection)
+		glm::value_ptr(aspect * projection)
 	);
 }
 
-void Game::transformations(bool enabled)
+void GameObject::transformations(bool enabled)
 {
 	glm::mat4 model(1.0f);
 
 	if (enabled)
 	{
-		model = glm::rotate(model, (float) glfwGetTime() * -5.0f, glm::vec3(50.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, (float) glfwGetTime() * -5.0f, glm::vec3(75.0f, 15.0f, 35.0f));
 	}
 
 	glUseProgram(selected_shader.getProgram());
@@ -102,7 +93,7 @@ void Game::transformations(bool enabled)
 	);
 }
 
-void Game::init()
+void GameObject::init()
 {
 	Resources::assign_shader(
 		"../src/shaders/triangle.vert",
@@ -115,15 +106,15 @@ void Game::init()
 	render = new Render(selected_shader);
 	render->render_data(
 		{
-			0.f,  0.f,  0.f,
-		 -0.3f, 0.5f, 0.f,
-			0.3f, 0.5f, 0.f
+			this->x1.x, this->x1.y, this->x1.z,
+			this->x2.x, this->x2.y, this->x2.z,
+			this->x3.x, this->x3.y, this->x3.z 
 		},
 		{}
 	);
 }
 
-void Game::build() {
+void GameObject::build() {
 	glUseProgram(selected_shader.getProgram());
 		
 	GLint colorLoc = glGetUniformLocation(
@@ -140,7 +131,7 @@ void Game::build() {
 	glUseProgram(0);
 }
 
-void Game::events(GLFWwindow *window)
+void GameObject::events(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) cout << "Pressed A" << endl;
 }

@@ -1,7 +1,7 @@
 #include "headers/shader.hpp"
 #include "headers/resources.hpp"
 #include "headers/application.hpp"
-#include "headers/game.hpp"
+#include "headers/game_object.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +18,14 @@ int main(int argc, char *argv[])
 	const GLchar *APP_NAME = "TEST";
 
 	Application *app = new Application(HEIGHT, WIDTH, APP_NAME);
-	Game *game = new Game(HEIGHT, WIDTH);
+	// "Game Object" -- Triangle
+	GameObject *triangle = new GameObject(
+		HEIGHT, 
+		WIDTH,
+		Vertex{ 0.f, 0.f, 0.f },
+		Vertex{ -0.85f, 0.85f, 0.f },
+		Vertex{ 0.85f, 0.85f, 0.f }
+	); 
 
 	if (!app->init())
 	{
@@ -26,30 +33,30 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	game->init();
-	game->projection(true, true); // Best practice
+	triangle->init();
+	triangle->projection(true, true); // Best practice
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
 		Application::process_input(app->get_window());
 
+		// May change the value
 		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+		triangle->events(app->get_window());
+		triangle->transformations();
 		glViewport(0, 0, WIDTH, HEIGHT);
-
-		game->events(app->get_window());
-		game->transformations();
 
 		glfwPollEvents();
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		game->build();
+		
+		triangle->build();
 
 		glfwSwapBuffers(app->get_window());
 	}
 
-	delete game, app;
+	delete triangle, app;
 	Resources::clean();
 	glfwTerminate();
 
