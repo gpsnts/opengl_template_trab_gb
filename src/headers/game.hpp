@@ -43,19 +43,19 @@ public:
 
 	void events(
 		GLFWwindow *window,
-		bool &ex1,
-		bool &ex2,
-		bool &ex4,
-		bool &ex5
+		GLfloat &left,
+		GLfloat &right,
+		GLfloat &up,
+		GLfloat &bottom
 	);
-	void projection(
-		bool aspect_correction = true,
-		bool ex1 = false,
-		bool ex2 = false
+	void projection(bool aspect_correction = true);
+	void transformations(
+		initializer_list<glm::highp_mat4> transformations,
+		bool horizontal
 	);
-	void transformations(bool enabled = false);
 	void init();
 	void build();
+	void update();
 
 	Render *get_render();
 	Shader get_shader();

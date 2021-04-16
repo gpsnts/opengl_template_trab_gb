@@ -20,9 +20,6 @@ int main(int argc, char *argv[])
 	GLint WIDTH = 1366;
 	const GLchar *APP_NAME = "TEST";
 
-	// cout << "\n\n\n" << CALC_QUAD_WIDTH(WIDTH) << "\n\n\n" << endl;
-	// cout << "\n\n\n" << CALC_QUAD_HEIGHT(HEIGHT) << "\n\n\n" << endl;
-
 	Application *app = new Application(HEIGHT, WIDTH, APP_NAME);
 	// TODO: GameObject here
 	Game *game = new Game(
@@ -39,99 +36,62 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	bool ex1 = false, ex2 = false, ex4 = false, ex5 = false; 
+	bool rotate = false; 
 
 	game->init();
-	// game->projection(); // Best practice
+	game->projection(); // Best practice
+
+	GLfloat left = 0.f, right = 0.f, up = 0.f, bottom = 0.f;
+
+	bool flag = true;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
 		Application::process_input(app->get_window());
 
-		game->transformations();
-		game->events(app->get_window(), ex1, ex2, ex4, ex5);
+		game->events(app->get_window(), left, right, up, bottom);
+
+		game->transformations(
+			{
+				glm::translate(glm::mat4(1.f), glm::vec3(right, 0.f, 0.f)),
+				glm::translate(glm::mat4(1.f), glm::vec3(0.f, up, 0.f)),
+				glm::translate(glm::mat4(1.f), glm::vec3(left * -1, 0.f, 0.f)),
+				glm::translate(glm::mat4(1.f), glm::vec3(0.f, bottom * -1, 0.f)),
+				glm::rotate(glm::mat4(1.f), (float) glfwGetTime() * -5.f, glm::vec3(0.f, 15.f, 0.f))
+			},
+			false
+		);
 
 		glfwPollEvents();
 		
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (ex1)
-		{
-			game->projection(true, true);
-			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
-			glViewport(
-				0,
-				0,
-				WIDTH,
-				HEIGHT
-			);
-			game->build();
-		}
+		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
 
-		if (ex2)
-		{
-			game->projection(false, false, true);
-			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
-			glViewport(
-				0,
-				0,
-				WIDTH,
-				HEIGHT
-			);
-			game->build();
-		}
-		
-		if (ex4)
-		{
-			game->projection();
-			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
-			glViewport(
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT),
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT)
-			);
-			game->build();
-		}
-		
-		if (ex5)
-		{
-			game->projection();
-			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
-			glViewport(
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT),
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT)
-			);
-			game->build();
+		glViewport(30, 30, WIDTH, HEIGHT);
+		game->build();
 
-			glViewport(
-				0,
-				0,
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT)
-			);
-			game->build();
+		game->transformations(
+			{
+				glm::rotate(glm::mat4(1.f), (float) glfwGetTime() * -5.f, glm::vec3(15.f, 0.f, 0.f))
+			},
+			false
+		);
 
-			glViewport(
-				0,
-				CALC_QUAD_HEIGHT(HEIGHT),
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT)
-			);
-			game->build();
+		glViewport(20, 20, CALC_QUAD_WIDTH(WIDTH), CALC_QUAD_HEIGHT(HEIGHT));
+		game->build();
 
-			glViewport(
-				CALC_QUAD_HEIGHT(WIDTH),
-				0,
-				CALC_QUAD_WIDTH(WIDTH),
-				CALC_QUAD_HEIGHT(HEIGHT)
-			);
-			game->build();
-		}
+		game->transformations(
+			{
+				glm::rotate(glm::mat4(1.f), (float) glfwGetTime() * -5.f, glm::vec3(0.f, 0.f, 10.f))
+			},
+			false
+		);
+
+		glViewport(10, 10, CALC_QUAD_WIDTH(WIDTH) / 2, CALC_QUAD_HEIGHT(HEIGHT) / 2);
+		game->build();
 
 		glfwSwapBuffers(app->get_window());
 	}

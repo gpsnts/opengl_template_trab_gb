@@ -24,7 +24,7 @@ Game::~Game()
 	delete render;
 }
 
-void Game::projection(bool aspect_correction, bool ex1, bool ex2)
+void Game::projection(bool aspect_correction)
 {
 	glm::mat4 projection(1.0f);
 	glm::mat4 aspect(1.f);
@@ -57,30 +57,11 @@ void Game::projection(bool aspect_correction, bool ex1, bool ex2)
 		}
 	}
 	
-	if (ex1)
-	{
-		projection = glm::ortho(
-			-10.f, 	10.f,	 // X (min-max)
-			-10.f, 	10.f,	 // Y (min-max)
-			 -1.f,   1.f   // Z (min-max)
-		);
-	}
-	else if (ex2)
-	{
-		projection = glm::ortho(
-			  0.f,	800.f,	// X (min-max)
-			600.f, 		0.f,	// Y (min-max)
-			 -1.f,  	1.f   // Z (min-max)
-		);
-	}
-	else
-	{
-		projection = glm::ortho(
-			-1.f, 	1.f,	// X (min-max)
-			-1.f, 	1.f,	// Y (min-max)
-			-1.f,  	1.f   // Z (min-max)
-		);
-	}
+	projection = glm::ortho(
+		-1.f, 	1.f,	// X (min-max)
+		-1.f, 	1.f,	// Y (min-max)
+		-1.f,  	1.f   // Z (min-max)
+	);
 
 	glUseProgram(selected_shader.getProgram());
 	glUniformMatrix4fv(
@@ -91,20 +72,20 @@ void Game::projection(bool aspect_correction, bool ex1, bool ex2)
 	);
 }
 
-void Game::transformations(bool enabled)
+void Game::transformations(
+	initializer_list<glm::highp_mat4> transformations,
+	bool horizontal
+)
 {
 	glm::mat4 model(1.0f);
 
-	if (enabled)
-	{
-		model = glm::rotate(model, (float) glfwGetTime() * -5.0f, glm::vec3(75.0f, 15.0f, 35.0f));
-	}
+	for (auto transformation : transformations) model *= transformation;
 
 	glUseProgram(selected_shader.getProgram());
 	glUniformMatrix4fv(
 		glGetUniformLocation(selected_shader.getProgram(), "model"),
 		1,
-		GL_FALSE,
+		horizontal ? GL_TRUE : GL_FALSE,
 		glm::value_ptr(model)
 	);
 }
@@ -155,17 +136,16 @@ void Game::build() {
 	glUseProgram(0);
 }
 
-void Game::events(GLFWwindow *window, bool &ex1, bool &ex2, bool &ex4, bool &ex5)
+void Game::events(
+	GLFWwindow *window,
+	GLfloat &left,
+	GLfloat &right,
+	GLfloat &up,
+	GLfloat &bottom
+)
 {
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) ex1 = false;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	ex1 = true;
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)	ex2 = false;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	ex2 = true;
-	
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)	ex4 = false;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	ex4 = true;
-	
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)	ex5 = false;
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)	ex5 = true;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) 	left 		+= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) right 	+= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) 		up 			+= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) 	bottom 	+= 0.01f;
 }
