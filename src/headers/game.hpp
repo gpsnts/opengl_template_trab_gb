@@ -41,7 +41,13 @@ public:
 		this->x3 = s_x3;
 	};
 
-	void events(GLFWwindow *window);
+	void events(
+		GLFWwindow *window,
+		bool &ex1,
+		bool &ex2,
+		bool &ex4,
+		bool &ex5
+	);
 	void projection(
 		bool aspect_correction = true,
 		bool ex1 = false,

@@ -28,12 +28,5 @@ Press key to show guide
 |----------|------|------|
 | 1        | Q    | A    |
 | 2        | W    | S    |
-| 3)a      | E    | D    |
-| 3)b      | R    | F    |
-| 4        | T    | G    |
-| 5        | Y    | H    |
-| 7        | U    | J    |
-
-## Ex - 7 -- Draw picture
-
-![Draw Pic](./casa.png)
+| 4        | E    | D    |
+| 5        | R    | F    |

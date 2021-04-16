@@ -42,8 +42,7 @@ int main(int argc, char *argv[])
 	bool ex1 = false, ex2 = false, ex4 = false, ex5 = false; 
 
 	game->init();
-	game->projection(); // Best practice
-	game->events(app->get_window());
+	// game->projection(); // Best practice
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
@@ -51,48 +50,88 @@ int main(int argc, char *argv[])
 		Application::process_input(app->get_window());
 
 		game->transformations();
+		game->events(app->get_window(), ex1, ex2, ex4, ex5);
 
 		glfwPollEvents();
 		
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		if (ex1)
+		{
+			game->projection(true, true);
+			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+			glViewport(
+				0,
+				0,
+				WIDTH,
+				HEIGHT
+			);
+			game->build();
+		}
+
+		if (ex2)
+		{
+			game->projection(false, false, true);
+			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+			glViewport(
+				0,
+				0,
+				WIDTH,
+				HEIGHT
+			);
+			game->build();
+		}
 		
-		// Ex. 4
-		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
-		glViewport(
-			CALC_QUAD_WIDTH(WIDTH),
-			CALC_QUAD_HEIGHT(HEIGHT),
-			CALC_QUAD_WIDTH(WIDTH),
-			CALC_QUAD_HEIGHT(HEIGHT)
-		);
-		game->build();
+		if (ex4)
+		{
+			game->projection();
+			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+			glViewport(
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT),
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT)
+			);
+			game->build();
+		}
+		
+		if (ex5)
+		{
+			game->projection();
+			glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+			glViewport(
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT),
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT)
+			);
+			game->build();
 
-		// Ex. 5
-		glViewport(
-			0,
-			0,
-			CALC_QUAD_WIDTH(WIDTH),
-			CALC_QUAD_HEIGHT(HEIGHT)
-		);
-		game->build();
+			glViewport(
+				0,
+				0,
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT)
+			);
+			game->build();
 
-		// Ex. 5
-		glViewport(
-			0,
-			CALC_QUAD_HEIGHT(HEIGHT),
-			CALC_QUAD_WIDTH(WIDTH),
-			CALC_QUAD_HEIGHT(HEIGHT)
-		);
-		game->build();
+			glViewport(
+				0,
+				CALC_QUAD_HEIGHT(HEIGHT),
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT)
+			);
+			game->build();
 
-		// Ex. 5
-		glViewport(
-			CALC_QUAD_HEIGHT(WIDTH),
-			0,
-			CALC_QUAD_WIDTH(WIDTH),
-			CALC_QUAD_HEIGHT(HEIGHT)
-		);
-		game->build();
+			glViewport(
+				CALC_QUAD_HEIGHT(WIDTH),
+				0,
+				CALC_QUAD_WIDTH(WIDTH),
+				CALC_QUAD_HEIGHT(HEIGHT)
+			);
+			game->build();
+		}
 
 		glfwSwapBuffers(app->get_window());
 	}

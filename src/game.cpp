@@ -155,20 +155,17 @@ void Game::build() {
 	glUseProgram(0);
 }
 
-void Game::events(GLFWwindow *window)
+void Game::events(GLFWwindow *window, bool &ex1, bool &ex2, bool &ex4, bool &ex5)
 {
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) cout << "Pressed Q" << endl;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	cout << "Pressed A" << endl;
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) ex1 = false;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	ex1 = true;
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)	cout << "Pressed W" << endl;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	cout << "Pressed W" << endl;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)	ex2 = false;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	ex2 = true;
 	
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)	cout << "Pressed E" << endl;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	cout << "Pressed D" << endl;
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)	ex4 = false;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	ex4 = true;
 	
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)	cout << "Pressed R" << endl;
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)	cout << "Pressed F" << endl;
-
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)	cout << "Pressed T" << endl;
-	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)	cout << "Pressed G" << endl;
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)	ex5 = false;
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)	ex5 = true;
 }
