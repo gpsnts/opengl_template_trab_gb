@@ -76,6 +76,5 @@ void Render::render_data(
 {
 	this->bind_vertex();
 	this->bind_buffer(data, ebo_indexes);
-	// TODO: Pass attribs by a vector and iterate this functions with thoso attribs
 	this->vbo_attrib(0, 0, 0);
 }

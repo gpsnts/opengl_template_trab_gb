@@ -1,5 +1,11 @@
 #include "headers/shader.hpp"
 
+Shader &Shader::use()
+{
+	glUseProgram(this->program);
+	return *this;
+}
+
 void Shader::compile_selected(const char *file_name, GLuint *shader, GLenum type)
 {
 	FILE *file = fopen(file_name, "r");
@@ -71,3 +77,22 @@ GLuint Shader::getProgram()
 {
 	return this->program;
 }
+
+void Shader::set_mat4(const GLchar *name, const glm::mat4 &matrix, GLboolean useShader)
+{
+  if (useShader) this->use();
+  glUniformMatrix4fv(glGetUniformLocation(this->program, name), 1, GL_FALSE, value_ptr(matrix));
+}
+
+void Shader::set_vec3(const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader)
+{
+  if (useShader) this->use();
+  glUniform3f(glGetUniformLocation(this->program, name), x, y, z);
+}
+
+void Shader::set_vec3(const GLchar *name, const glm::vec3 &value, GLboolean useShader)
+{
+  if (useShader) this->use();
+  glUniform3f(glGetUniformLocation(this->program, name), value.x, value.y, value.z);
+}
+
