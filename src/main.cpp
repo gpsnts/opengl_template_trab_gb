@@ -1,3 +1,6 @@
+// Ler o que é definido no cabeçalho "stb_image.h" para entender o porquê disso
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "headers/shader.hpp"
 #include "headers/resources.hpp"
 #include "headers/application.hpp"
