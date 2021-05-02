@@ -48,10 +48,14 @@ int main(int argc, char *argv[])
 
 	bool flag = true;
 
+	Resources::assign_texture("flat_character_1", GL_TRUE, "flat_character");
+
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		if (show_fps) Application::frames_per_second(app->get_window());
 		Application::process_input(app->get_window());
+
+		Resources::get_texture("flat_character");
 
 		game->events(app->get_window(), left, right, up, bottom);
 
@@ -72,6 +76,7 @@ int main(int argc, char *argv[])
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
+
 
 		glViewport(30, 30, WIDTH, HEIGHT);
 		game->build();

@@ -31,6 +31,11 @@ Shader Resources::get_shader(string key_shader)
 	return shaders[key_shader];
 }
 
+Texture Resources::get_texture(string key_texture)
+{
+	return textures[key_texture];
+}
+
 void Resources::clean()
 {
 	for (auto iter_shaders : shaders)
