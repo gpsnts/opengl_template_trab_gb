@@ -15,14 +15,14 @@ using namespace glm;
 
 class GameObject
 {
-private: 
+public:
 	vec2 obj_position, obj_size, obj_velocity;
   vec3 obj_color;
   GLfloat obj_rotation;
   GLboolean is_solid;
   GLboolean is_deleted;
   Texture sprite;
-public:
+
 	GameObject() :
 	sprite() {
 		this->obj_position 	= vec2(0.f, 0.f);
