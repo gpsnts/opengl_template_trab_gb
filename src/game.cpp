@@ -1,12 +1,15 @@
 #include "headers/game.hpp"
 
+#define BASE_LINE (215.f + 55.47225f)
+
 Renderer *renderer;
 Shader selected_shader;
 
 GameObject *player;
 GameObject *cloud_1;
+GameObject *cactus_1;
 
-const GLfloat PLAYER_VELOCITY(500.f);
+const GLfloat PLAYER_VELOCITY(375.f);
 
 Game::~Game()
 {
@@ -43,26 +46,30 @@ void Game::init()
 	Resources::assign_texture("../src/textures/dino_chrome_dinossaur.png", GL_TRUE, "character");
 	Resources::assign_texture("../src/textures/dino_chrome_floor_compose.png", GL_TRUE, "floor_asset");
 	Resources::assign_texture("../src/textures/dino_chrome_cloud.png", GL_TRUE, "cloud_1");
+	Resources::assign_texture("../src/textures/dino_chrome_cactus_1.png", GL_TRUE, "cactus_1");
 
-	// vec2 PLAYER_SIZE(800, 215);
 	vec2 PLAYER_SIZE(200, 215);
 	vec2 CLOUD_1_SIZE(230, 70);
+	vec2 CACTUS_1_SIZE(84, 150);
 	
 	vec2 player_pos = vec2(
 		0,
-		(this->ref_height - (215.f + 55.47225f))
+		(this->ref_height - BASE_LINE)
 	);
 
 	vec2 cloud_1_pos(
 		this->ref_width - 500,
 		125
-		
-		// 25,
-		// (this->ref_height - (this->ref_height * 0.67f))
 	);
 
-	player 	= new GameObject(Resources::get_texture("character"), player_pos, PLAYER_SIZE);
-	cloud_1 = new GameObject(Resources::get_texture("cloud_1"), cloud_1_pos, CLOUD_1_SIZE);
+	vec2 cactus_1_pos = vec2(
+		this->ref_width - 450,
+		(this->ref_height - (BASE_LINE - 65.f))
+	);
+
+	cloud_1 	= new GameObject(Resources::get_texture("cloud_1"), cloud_1_pos, CLOUD_1_SIZE);
+	cactus_1 	= new GameObject(Resources::get_texture("cactus_1"), cactus_1_pos, CACTUS_1_SIZE);
+	player 		= new GameObject(Resources::get_texture("character"), player_pos, PLAYER_SIZE);
 }
 
 void Game::handle_input(GLfloat delta, GLint movement, GLboolean action, GLint width, GLint height)
@@ -94,6 +101,8 @@ void Game::build()
 	Texture text_floor;
 	text_floor = Resources::get_texture("floor_asset");
 	renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
-	player->draw(*renderer);
+
 	cloud_1->draw(*renderer);
+	cactus_1->draw(*renderer);
+	player->draw(*renderer);
 }
