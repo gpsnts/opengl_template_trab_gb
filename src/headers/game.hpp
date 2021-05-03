@@ -30,13 +30,7 @@ public:
 		this->ref_width = s_width;
 	};
 
-	void events(
-		GLFWwindow *window,
-		GLfloat &left,
-		GLfloat &right,
-		GLfloat &up,
-		GLfloat &bottom
-	);
+	void handle_input(GLfloat delta, GLint movement, GLboolean action, GLint width, GLint height);
 
 	void init();
 	void build();

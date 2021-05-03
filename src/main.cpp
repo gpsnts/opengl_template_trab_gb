@@ -32,17 +32,36 @@ int main(int argc, char *argv[])
 
 	game->init();
 
-	GLfloat left = 0.f, right = 0.f, up = 0.f, bottom = 0.f;
-
-	bool flag = true;
+	GLfloat delta 			= 0.f;
+  GLfloat last_frame 	= 0.f;
+	GLint movement 			= 0;
+  GLboolean action 		= false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
 		Application::frames_per_second(app->get_window());
 		
 		Application::process_input(app->get_window());
-		glfwPollEvents();
 		
+    if (glfwGetKey(app->get_window(), GLFW_KEY_LEFT) == GLFW_PRESS) movement = -1;
+
+    if (glfwGetKey(app->get_window(), GLFW_KEY_RIGHT) == GLFW_PRESS) movement = 1;
+
+    if ((glfwGetKey(app->get_window(), GLFW_KEY_LEFT) != GLFW_PRESS)
+				 && (glfwGetKey(app->get_window(), GLFW_KEY_RIGHT) != GLFW_PRESS)) movement = 0;
+
+    if (glfwGetKey(app->get_window(), GLFW_KEY_SPACE) == GLFW_PRESS) action = true;
+
+		glfwPollEvents();
+
+		GLfloat current = glfwGetTime();
+    delta 					= current - last_frame;
+    last_frame 			= current;
+		
+		game->handle_input(delta, movement, action, WIDTH, HEIGHT);
+
+		game->update();
+
 		glClearColor(0.33f, 0.1f, 0.25f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);

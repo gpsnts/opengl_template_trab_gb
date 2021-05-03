@@ -4,8 +4,8 @@ Renderer *renderer;
 Shader selected_shader;
 
 GameObject *player;
-GameObject *obj1;
-const GLfloat PLAYER_VELOCITY(500.0f);
+
+const GLfloat PLAYER_VELOCITY(500.f);
 
 Game::~Game()
 {
@@ -24,7 +24,8 @@ void Game::init()
 
 	
 	mat4 projection = glm::ortho(
-		0.0f, static_cast<GLfloat>(this->ref_width), 
+		0.0f,
+		static_cast<GLfloat>(this->ref_width), 
   	static_cast<GLfloat>(this->ref_height),
 		0.0f,
 		-1.0f,
@@ -38,33 +39,47 @@ void Game::init()
 	sprite = Resources::get_shader("tga");
 	renderer = new Renderer(sprite);
 	
-	Resources::assign_texture("../src/textures/dino_chrome_spreadsheet.png", GL_TRUE, "char");
+	Resources::assign_texture("../src/textures/dino_chrome_spreadsheet_v2.png", GL_TRUE, "character");
+	Resources::assign_texture("../src/textures/dino_chrome_floor_compose.png", GL_TRUE, "floor_asset");
 	
-	vec2 OBJECT_SIZE(800, 215);
+	vec2 PLAYER_SIZE(800, 215);
 	
 	vec2 player_pos = vec2(
 		0,
-		0
+		(this->ref_height - (215 + 50))
 	);
 
-	player = new GameObject(Resources::get_texture("char"), player_pos, OBJECT_SIZE);
+	player = new GameObject(Resources::get_texture("character"), player_pos, PLAYER_SIZE);
+}
+
+void Game::handle_input(GLfloat delta, GLint movement, GLboolean action, GLint width, GLint height)
+{
+	std::cout << "DELTA: " << delta << std::endl;
+
+  GLfloat velocity = PLAYER_VELOCITY * delta;
+  if (movement == -1)
+    {
+      if (player->obj_position.x >= 0) {
+        player->obj_position.x -= velocity;
+      }
+    }
+  if (movement == 1)
+  {
+    if (player->obj_position.x <=  width - player->obj_size.x) {
+      player->obj_position.x += velocity;
+    }
+  }
+}
+
+void Game::update()
+{
+
 }
 
 void Game::build()
 {
+	Texture text_floor;
+	text_floor = Resources::get_texture("floor_asset");
+	renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
 	player->draw(*renderer);
-}
-
-void Game::events(
-	GLFWwindow *window,
-	GLfloat &left,
-	GLfloat &right,
-	GLfloat &up,
-	GLfloat &bottom
-)
-{
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) 	left 		+= 0.01f;
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) right 	+= 0.01f;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) 		up 			+= 0.01f;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) 	bottom 	+= 0.01f;
 }
