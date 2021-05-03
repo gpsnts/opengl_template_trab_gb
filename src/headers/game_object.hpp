@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 
 #include "texture.hpp"
-// #include "render.hpp"
+#include "renderer.hpp"
 
 using namespace glm;
 
@@ -52,7 +52,7 @@ public:
 		this->sprite 				=	s_sprite;
 	};
 
-	// virtual void draw(Render &renderer);
+	virtual void draw(Renderer &renderer);
 };
 
 #endif // __GAME_OBJECT_HPP__

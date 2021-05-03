@@ -28,7 +28,7 @@ public:
 	);
 
 	static Texture assign_texture(
-		const char *texture_file,
+		const char *file_loc,
 		GLboolean alpha,
 		string key_texture
 	);

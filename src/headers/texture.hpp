@@ -9,10 +9,10 @@ class Texture
 private:
  	GLuint width, height;
  	GLuint wrap_s, wrap_t;
- 	GLuint internal_format, image_format;
  	GLuint filter_min, filter_max;
 public:
 	GLuint texture_id;
+	GLuint internal_format, image_format;
 
   Texture()
 	{
@@ -26,15 +26,15 @@ public:
 		glGenTextures(1, &this->texture_id);
 	};
 
-	void set_internal_format(GLuint s_internal_format)
-	{
-		this->internal_format = s_internal_format;
-	}
+	// void set_internal_format(GLuint s_internal_format)
+	// {
+	// 	this->internal_format = s_internal_format;
+	// }
 
-	void set_image_format(GLuint s_image_format)
-	{
-		this->internal_format = s_image_format;
-	}
+	// void set_image_format(GLuint s_image_format)
+	// {
+	// 	this->internal_format = s_image_format;
+	// }
 
   void generate(GLuint width, GLuint height, unsigned char* data);
   void bind() const;

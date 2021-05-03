@@ -1,8 +1,10 @@
 #include "headers/texture.hpp"
+#include <iostream>
 
 void Texture::generate(GLuint width, GLuint height, unsigned char* data)
 {
 	glBindTexture(GL_TEXTURE_2D, this->texture_id);
+ 
   glTexImage2D(
 		GL_TEXTURE_2D, 0,
 		this->internal_format,
