@@ -1,4 +1,4 @@
-# **opengl_template_3**
+# **opengl_template_4*
 
 ## **IMPORTANT**
 
@@ -26,5 +26,3 @@ Add a `show_fps` arg to show info about the app. E.g `./run show_fps`
 |----------|----------------|
 | Left     | ←              |
 | Right    | →              |
-| Up       | ↑              |
-| Down     | ↓              |
