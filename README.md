@@ -1,4 +1,4 @@
-# **opengl_template_4*
+# **opengl_template_5*
 
 ## **IMPORTANT**
 
@@ -24,5 +24,11 @@ Add a `show_fps` arg to show info about the app. E.g `./run show_fps`
 
 | Movement | Keyboard Arrow |
 |----------|----------------|
-| Left     | ←              |
-| Right    | →              |
+| Default  | Q              |
+| Red channel | W              |
+| Green channel | E              |
+| Blue channel | R              |
+| Greyscale  |  T       |
+| Colorização | A       |
+| Inversão | S          |
+| Binarização | D       |

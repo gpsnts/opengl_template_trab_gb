@@ -58,6 +58,8 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		sprite = Resources::get_shader("tga");
 		renderer = new Renderer(sprite);
 		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
 
 	if (selection == 0)
@@ -70,6 +72,8 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
 		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
 
 	if (selection == 1)
@@ -82,6 +86,8 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
 		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
 
 	if (selection == 2)
@@ -94,6 +100,8 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
 		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
 
 	if (selection == 3)
@@ -105,13 +113,55 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		sprite = Resources::get_shader("1_b");
 		renderer = new Renderer(sprite);
 		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
+	}
+
+	if (selection == 4)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_c.frag", "1_c");
+		Resources::get_shader("1_c").use().set_int("image", 0);
+		Resources::get_shader("1_c").use().set_vec3("spriteColor", vec3(1.0, 0.0, 1.0));
+		Resources::get_shader("1_c").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_c");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
+	}
+
+	if (selection == 5)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_c.frag", "1_d");
+		Resources::get_shader("1_d").use().set_int("image", 0);
+		Resources::get_shader("1_d").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_d");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
+	}
+
+	if (selection == 6)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_c.frag", "1_e");
+		Resources::get_shader("1_e").use().set_int("image", 0);
+		Resources::get_shader("1_e").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_e");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		delete lena;
+		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
 }
 
 void Game::build()
 {
-	Texture text_floor;
-	text_floor = Resources::get_texture("floor_asset");
-	renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
+	// Texture text_floor;
+	// text_floor = Resources::get_texture("floor_asset");
+	// renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
 	lena->draw(*renderer);
 }

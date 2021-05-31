@@ -40,6 +40,24 @@ void high_level_filter_mapping(GLFWwindow  *ref_window, GLint &ref_selection)
 		cout << "Grayscale" << endl;
 		ref_selection = 3;
 	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		cout << "Colorização (roxo)" << endl;
+		ref_selection = 4;
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		cout << "Inversão" << endl;
+		ref_selection = 5;
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		cout << "Binarização" << endl;
+		ref_selection = 6;
+	}	
 }
 
 int main(int argc, char *argv[])
@@ -67,7 +85,7 @@ int main(int argc, char *argv[])
 
 	GLfloat delta 			= 0.f;
   GLfloat last_frame 	= 0.f;
-	GLint selection			= 0;
+	GLint selection			= -1;
   GLboolean action 		= false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
