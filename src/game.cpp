@@ -1,13 +1,11 @@
 #include "headers/game.hpp"
 
-#define BASE_LINE (215.f + 55.47225f)
-
 Renderer *renderer;
 Shader selected_shader;
+mat4 projection;
+vec2 LENA_SIZE(1366, 768), LENA_POSITION(0, 0);
 
-GameObject *player;
-GameObject *cloud_1;
-GameObject *cactus_1;
+GameObject *lena;
 
 const GLfloat PLAYER_VELOCITY(375.f);
 
@@ -15,7 +13,7 @@ Game::~Game()
 {
 	cout << "Deleting game itens (Renderer, GameObject(s), Shader)" << endl;
 	delete renderer;
-	delete player, cloud_1;
+	delete lena;
 }
 
 void Game::init()
@@ -27,7 +25,7 @@ void Game::init()
 	);
 
 	
-	mat4 projection = glm::ortho(
+	projection = glm::ortho(
 		0.0f,
 		static_cast<GLfloat>(this->ref_width), 
   	static_cast<GLfloat>(this->ref_height),
@@ -43,57 +41,71 @@ void Game::init()
 	sprite = Resources::get_shader("tga");
 	renderer = new Renderer(sprite);
 	
-	Resources::assign_texture("../src/textures/dino_chrome_dinossaur.png", GL_TRUE, "character");
-	Resources::assign_texture("../src/textures/dino_chrome_floor_compose.png", GL_TRUE, "floor_asset");
-	Resources::assign_texture("../src/textures/dino_chrome_cloud.png", GL_TRUE, "cloud_1");
-	Resources::assign_texture("../src/textures/dino_chrome_cactus_1.png", GL_TRUE, "cactus_1");
 
-	vec2 PLAYER_SIZE(200, 215);
-	vec2 CLOUD_1_SIZE(230, 70);
-	vec2 CACTUS_1_SIZE(84, 150);
-	
-	vec2 player_pos = vec2(
-		0,
-		(this->ref_height - BASE_LINE)
-	);
+	Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
 
-	vec2 cloud_1_pos(
-		this->ref_width - 500,
-		125
-	);
-
-	vec2 cactus_1_pos = vec2(
-		this->ref_width - 450,
-		(this->ref_height - (BASE_LINE - 65.f))
-	);
-
-	cloud_1 	= new GameObject(Resources::get_texture("cloud_1"), cloud_1_pos, CLOUD_1_SIZE);
-	cactus_1 	= new GameObject(Resources::get_texture("cactus_1"), cactus_1_pos, CACTUS_1_SIZE);
-	player 		= new GameObject(Resources::get_texture("character"), player_pos, PLAYER_SIZE);
+	lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 }
 
-void Game::handle_input(GLfloat delta, GLint movement, GLboolean action, GLint width, GLint height)
+void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint width, GLint height)
 {
-	std::cout << "DELTA: " << delta << std::endl;
+	if (selection == -1)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/tga.frag", "tga");
+		Resources::get_shader("tga").use().set_int("image", 0);
+		Resources::get_shader("tga").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("tga");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+	}
 
-  GLfloat velocity = PLAYER_VELOCITY * delta;
-  if (movement == -1)
-    {
-      if (player->obj_position.x >= 0) {
-        player->obj_position.x -= velocity;
-      }
-    }
-  if (movement == 1)
-  {
-    if (player->obj_position.x <=  width - player->obj_size.x) {
-      player->obj_position.x += velocity;
-    }
-  }
-}
+	if (selection == 0)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_a.frag", "1_a");
+		Resources::get_shader("1_a").use().set_int("image", 0);
+		Resources::get_shader("1_a").use().set_int("code", 1);
+		Resources::get_shader("1_a").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_a");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+	}
 
-void Game::update()
-{
+	if (selection == 1)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_a.frag", "1_a");
+		Resources::get_shader("1_a").use().set_int("image", 0);
+		Resources::get_shader("1_a").use().set_int("code", 2);
+		Resources::get_shader("1_a").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_a");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+	}
 
+	if (selection == 2)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_a.frag", "1_a");
+		Resources::get_shader("1_a").use().set_int("image", 0);
+		Resources::get_shader("1_a").use().set_int("code", 3);
+		Resources::get_shader("1_a").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_a");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+	}
+
+	if (selection == 3)
+	{
+		Resources::assign_shader("../src/shaders/tga.vert", "../src/shaders/1_b.frag", "1_b");
+		Resources::get_shader("1_b").use().set_int("image", 0);
+		Resources::get_shader("1_b").set_mat4("projection", projection);
+		Shader sprite;
+		sprite = Resources::get_shader("1_b");
+		renderer = new Renderer(sprite);
+		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+	}
 }
 
 void Game::build()
@@ -101,8 +113,5 @@ void Game::build()
 	Texture text_floor;
 	text_floor = Resources::get_texture("floor_asset");
 	renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
-
-	cloud_1->draw(*renderer);
-	cactus_1->draw(*renderer);
-	player->draw(*renderer);
+	lena->draw(*renderer);
 }

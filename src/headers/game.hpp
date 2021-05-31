@@ -30,11 +30,11 @@ public:
 		this->ref_width = s_width;
 	};
 
-	void handle_input(GLfloat delta, GLint movement, GLboolean action, GLint width, GLint height);
+	void handle_input(GLfloat delta, GLint selection, GLboolean action, GLint width, GLint height);
 
 	void init();
 	void build();
-	void update();
+	// void update();
 };
 
 #endif // __GAME_HPP__

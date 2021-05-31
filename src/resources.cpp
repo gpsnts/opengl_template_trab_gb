@@ -62,16 +62,13 @@ Texture Resources::load_texture_file(string const &file_loc, GLboolean alpha)
   }
   
 	int width, height, channels;
-  cout << "Loading texture: " << file_loc << endl;
+  // cout << "Loading texture: " << file_loc << endl;
 	unsigned char* image;
 	
 	if (alpha) image = stbi_load(file_loc.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 	else image = stbi_load(file_loc.c_str(), &width, &height, &channels,  STBI_rgb);
 
 	if (!image) fprintf(stderr, "%s %s\n", "Failed to Load Texture", file_loc.c_str());
-	
-	std::cout << "width: " << width << std::endl;
-	std::cout << "height: " << height << std::endl;
 
 	texture.generate(width, height, image);
   stbi_image_free(image);

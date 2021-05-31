@@ -9,6 +9,39 @@
 #define CALC_QUAD_WIDTH(x) (x / 2)
 #define CALC_QUAD_HEIGHT(y) (y / 2)
 
+void high_level_filter_mapping(GLFWwindow  *ref_window, GLint &ref_selection)
+{
+	if (glfwGetKey(ref_window, GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		cout << "Default" << endl;
+		ref_selection = -1;
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		cout << "Apenas vermelho" << endl;
+		ref_selection = 0;
+	}
+	
+	if (glfwGetKey(ref_window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		cout << "Apenas verde" << endl;
+		ref_selection = 1;
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		cout << "Apenas azul" << endl;
+		ref_selection = 2;
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_T) == GLFW_PRESS)
+	{
+		cout << "Grayscale" << endl;
+		ref_selection = 3;
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	GLint HEIGHT = 768;
@@ -34,7 +67,7 @@ int main(int argc, char *argv[])
 
 	GLfloat delta 			= 0.f;
   GLfloat last_frame 	= 0.f;
-	GLint movement 			= 0;
+	GLint selection			= 0;
   GLboolean action 		= false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
@@ -43,24 +76,15 @@ int main(int argc, char *argv[])
 		
 		Application::process_input(app->get_window());
 		
-    if (glfwGetKey(app->get_window(), GLFW_KEY_LEFT) == GLFW_PRESS) movement = -1;
-
-    if (glfwGetKey(app->get_window(), GLFW_KEY_RIGHT) == GLFW_PRESS) movement = 1;
-
-    if ((glfwGetKey(app->get_window(), GLFW_KEY_LEFT) != GLFW_PRESS)
-				 && (glfwGetKey(app->get_window(), GLFW_KEY_RIGHT) != GLFW_PRESS)) movement = 0;
-
-    if (glfwGetKey(app->get_window(), GLFW_KEY_SPACE) == GLFW_PRESS) action = true;
-
 		glfwPollEvents();
+
+		high_level_filter_mapping(app->get_window(), selection);
 
 		GLfloat current = glfwGetTime();
     delta 					= current - last_frame;
     last_frame 			= current;
 		
-		game->handle_input(delta, movement, action, WIDTH, HEIGHT);
-
-		game->update();
+		game->handle_input(delta, selection, action, WIDTH, HEIGHT);
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
