@@ -57,7 +57,13 @@ void high_level_filter_mapping(GLFWwindow  *ref_window, GLint &ref_selection)
 	{
 		cout << "Binarização" << endl;
 		ref_selection = 6;
-	}	
+	}
+
+	if (glfwGetKey(ref_window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		cout << "Custom" << endl;
+		ref_selection = 7;
+	}
 }
 
 int main(int argc, char *argv[])

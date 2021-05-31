@@ -32,3 +32,4 @@ Add a `show_fps` arg to show info about the app. E.g `./run show_fps`
 | Colorização | A       |
 | Inversão | S          |
 | Binarização | D       |
+| Custom (baseado na imagem do Doge)     | F         |
