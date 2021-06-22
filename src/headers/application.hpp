@@ -33,6 +33,7 @@ public:
 	
 	void static frames_per_second(GLFWwindow *window);
 	void static process_input(GLFWwindow *window);
+	void static process_mouse_pos_input(GLFWwindow *window, int button, int action, int mods);
 	bool init();
 	GLFWwindow *get_window();
 };

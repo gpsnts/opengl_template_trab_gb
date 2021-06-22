@@ -6,8 +6,9 @@
 #include "headers/application.hpp"
 #include "headers/game.hpp"
 
-#define CALC_QUAD_WIDTH(x) (x / 2)
-#define CALC_QUAD_HEIGHT(y) (y / 2)
+GLint selection = -1;
+
+vec2 RANGE_BUTTON(1366 * 0.1, 768 * 0.15);
 
 void high_level_filter_mapping(GLFWwindow  *ref_window, GLint &ref_selection)
 {
@@ -66,6 +67,31 @@ void high_level_filter_mapping(GLFWwindow  *ref_window, GLint &ref_selection)
 	}
 }
 
+bool valid_range(double x, double y, double boundary_x, double boundary_y, double offset_x, double offset_y) {
+	double MIN_X = boundary_x + offset_x;
+	double MIN_Y = boundary_y + offset_y;
+	double MAX_X = MIN_X + 115 + offset_x;
+	double MAX_Y = MIN_Y + 40 + offset_y;
+
+	return (MIN_X <= x && x <= MAX_X) && (MIN_Y <= y && y <= MAX_Y);
+}
+
+void mouse_callback(GLFWwindow *window, double x, double y)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) selection = -1;
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 0)) selection = 0;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 60)) selection = 1;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 150)) selection = 2;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 240)) selection = 3;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 320)) selection = 4;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 410)) selection = 5;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 500)) selection = 6;
+		if(valid_range(x, y, RANGE_BUTTON.x, RANGE_BUTTON.y, 0, 590)) selection = 7;
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	GLint HEIGHT = 768;
@@ -91,11 +117,14 @@ int main(int argc, char *argv[])
 
 	GLfloat delta 			= 0.f;
   GLfloat last_frame 	= 0.f;
-	GLint selection			= -1;
   GLboolean action 		= false;
 
 	while (!glfwWindowShouldClose(app->get_window()))
 	{
+		glfwSetInputMode(app->get_window(), GLFW_STICKY_KEYS, GL_TRUE );
+
+		glfwSetCursorPosCallback(app->get_window(), &mouse_callback);
+
 		Application::frames_per_second(app->get_window());
 		
 		Application::process_input(app->get_window());
@@ -110,7 +139,7 @@ int main(int argc, char *argv[])
 		
 		game->handle_input(delta, selection, action, WIDTH, HEIGHT);
 
-		glClearColor(1.f, 1.f, 1.f, 1.f);
+		glClearColor(1.f, 0.f, 15.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwGetFramebufferSize(app->get_window(), &WIDTH, &HEIGHT);
 

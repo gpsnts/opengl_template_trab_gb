@@ -3,18 +3,21 @@
 Renderer *renderer;
 Shader selected_shader;
 mat4 projection;
-vec2 LENA_SIZE(1366, 768), LENA_POSITION(0, 0);
+vec2 LENA_SIZE(800, 600), LENA_POSITION(800 * .33f, 600 * .15f);
+vec2 INPUT_SIZE(1366 * 0.1, 768 * 0.15);
 
 GameObject *lena;
 GameObject *doge;
-
-const GLfloat PLAYER_VELOCITY(375.f);
+GameObject *filtro_1, *filtro_2, *filtro_3, *filtro_4, *filtro_5, *filtro_6, *filtro_7;
 
 Game::~Game()
 {
 	cout << "Deleting game itens (Renderer, GameObject(s), Shader)" << endl;
 	delete renderer;
-	delete lena, doge;
+	delete lena, doge,
+				 filtro_1, filtro_2, filtro_3,
+				 filtro_4, filtro_5, filtro_6,
+				 filtro_7;
 }
 
 void Game::init()
@@ -45,9 +48,24 @@ void Game::init()
 
 	Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
 	Resources::assign_texture("../src/textures/doge.png", GL_TRUE, "doge");
+	Resources::assign_texture("../src/textures/filtro_1.png", GL_TRUE, "filtro_1");
+	Resources::assign_texture("../src/textures/filtro_2.png", GL_TRUE, "filtro_2");
+	Resources::assign_texture("../src/textures/filtro_3.png", GL_TRUE, "filtro_3");
+	Resources::assign_texture("../src/textures/filtro_4.png", GL_TRUE, "filtro_4");
+	Resources::assign_texture("../src/textures/filtro_5.png", GL_TRUE, "filtro_5");
+	Resources::assign_texture("../src/textures/filtro_6.png", GL_TRUE, "filtro_6");
+	Resources::assign_texture("../src/textures/filtro_7.png", GL_TRUE, "filtro_7");
 
 	lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	doge = new GameObject(Resources::get_texture("doge"), vec2(0, this->ref_height), vec2(250, 250));
+
+	filtro_1 = new GameObject(Resources::get_texture("filtro_1"), INPUT_SIZE, vec2(120, 60));
+	filtro_2 = new GameObject(Resources::get_texture("filtro_2"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 90), vec2(120, 60));
+	filtro_3 = new GameObject(Resources::get_texture("filtro_3"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 180), vec2(120, 60));
+	filtro_4 = new GameObject(Resources::get_texture("filtro_4"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 270), vec2(120, 60));
+	filtro_5 = new GameObject(Resources::get_texture("filtro_5"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 360), vec2(120, 60));
+	filtro_6 = new GameObject(Resources::get_texture("filtro_6"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 450), vec2(120, 60));
+	filtro_7 = new GameObject(Resources::get_texture("filtro_7"), vec2(INPUT_SIZE.x, INPUT_SIZE.y + 540), vec2(120, 60));
 }
 
 void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint width, GLint height)
@@ -181,8 +199,12 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 
 void Game::build()
 {
-	// Texture text_floor;
-	// text_floor = Resources::get_texture("floor_asset");
-	// renderer->draw_texture(text_floor, vec2(0, (this->ref_height - 320)), vec2(6000, 320));
 	lena->draw(*renderer);
+	filtro_1->draw(*renderer);
+	filtro_2->draw(*renderer);
+	filtro_3->draw(*renderer);
+	filtro_4->draw(*renderer);
+	filtro_5->draw(*renderer);
+	filtro_6->draw(*renderer);
+	filtro_7->draw(*renderer);
 }
