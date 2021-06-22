@@ -1,5 +1,8 @@
 #include "headers/game.hpp"
 
+string selected_image;
+vector<string> available_images;
+
 Renderer *renderer;
 Shader selected_shader;
 mat4 projection;
@@ -22,6 +25,15 @@ Game::~Game()
 
 void Game::init()
 {
+	for (const auto &file : filesystem::directory_iterator("../src/textures/edit")) {
+		cout << file.path().stem() << endl;
+	}
+
+	for (auto item : available_images) cout << item << endl; 
+
+	cout << "Escolha uma das imagens a cima" << endl;
+	cin >> selected_image;
+
 	Resources::assign_shader(
 		"../src/shaders/tga.vert",
 		"../src/shaders/tga.frag",
@@ -45,9 +57,8 @@ void Game::init()
 	sprite = Resources::get_shader("tga");
 	renderer = new Renderer(sprite);
 	
-
-	Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
-	Resources::assign_texture("../src/textures/doge.png", GL_TRUE, "doge");
+	Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
+	Resources::assign_texture("../src/textures/edit/doge.png", GL_TRUE, "doge");
 	Resources::assign_texture("../src/textures/filtro_1.png", GL_TRUE, "filtro_1");
 	Resources::assign_texture("../src/textures/filtro_2.png", GL_TRUE, "filtro_2");
 	Resources::assign_texture("../src/textures/filtro_3.png", GL_TRUE, "filtro_3");
@@ -78,7 +89,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("tga");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -92,7 +103,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -106,7 +117,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -120,7 +131,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_a");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -133,7 +144,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_b");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -147,7 +158,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_c");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -160,7 +171,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_d");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -173,7 +184,7 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_e");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
 		delete lena;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);
 	}
@@ -188,8 +199,8 @@ void Game::handle_input(GLfloat delta, GLint selection, GLboolean action, GLint 
 		Shader sprite;
 		sprite = Resources::get_shader("1_f");
 		renderer = new Renderer(sprite);
-		Resources::assign_texture("../src/textures/lena.png", GL_TRUE, "lena");
-		Resources::assign_texture("../src/textures/doge.png", GL_TRUE, "doge");
+		Resources::assign_texture(("../src/textures/edit/" + selected_image + ".png").c_str(), GL_TRUE, "lena");
+		Resources::assign_texture("../src/textures/edit/doge.png", GL_TRUE, "doge");
 
 		delete lena, doge;
 		lena = new GameObject(Resources::get_texture("lena"), LENA_POSITION, LENA_SIZE);

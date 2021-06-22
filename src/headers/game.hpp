@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,6 +16,12 @@
 #include "renderer.hpp"
 #include "render.hpp"
 #include "resources.hpp"
+
+#include <filesystem>
+
+// using std::cout; using std::cin;
+// using std::endl; using std::string;
+namespace fs = std::filesystem;
 
 class Game
 {
